@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, g, render_template, request
 from playdash.db import get_db
 
-bp = Blueprint('rotas', __name__)
+bp = Blueprint('routes', __name__)
 
 @bp.route("/penis", methods=('GET',))
 def pessoas():

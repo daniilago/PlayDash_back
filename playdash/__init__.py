@@ -23,10 +23,14 @@ def create_app(test_config=None):
         pass
 
     @app.route('/')
+    @app.route('/home')
     def hello():
-        return 'Hello, World!'
+        return "<h1>Hello, World!</h1>"
 
     from . import db
     db.init_app(app)
+
+    from . import auth
+    app.register_blueprint(auth.bp)
 
     return app
