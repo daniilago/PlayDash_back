@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Jogadores Cadastrados{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if players %}
+        {% for player in players %}
+            <li>{{  player['nome_jogador'], 
+                    player['data_nascimento'], 
+                    player['nacionalidade'], 
+                    player['foto'],
+                    player['gols'],
+                    player['posicao'],
+                    player['numero'],
+                    player['faltas'],
+                    player['cartoes_amarelos'],
+                    player['cartoes_vermelhos'],
+                    player['nome_time']
+            }}</li>
+        {% endfor %}
+    {% else %}
+        <p>Nenhum jogador cadastrado</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Times Cadastrados{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if teams %}
+        {% for team in teams %}
+            <li>{{  team['nome_time'], 
+                    team['brasao'], 
+                    team['total_partidas'], 
+                    team['total_pontos'],
+                    team['faltas'],
+                    team['cartoes_amarelos_time'],
+                    team['cartoes_vermelhos_time'],
+                    team['vitorias'],
+                    team['empates'],
+                    team['derrotas'],
+                    team['gols_pro'],
+                    team['gols_contra']
+            }}</li>
+        {% endfor %}
+    {% else %}
+        <p>Nenhum time cadastrado</p>
+    {% endif %}
+{% endblock %}

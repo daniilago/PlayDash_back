@@ -17,7 +17,7 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(
-            'SELECT * FROM usuario WHERE nome_usuario = ?', (user_name)
+            'SELECT * FROM usuario WHERE nome_usuario = ?', (user_name,)
         ).fetchone()
 
 @bp.route('/register', methods=('GET', 'POST'))
@@ -26,7 +26,7 @@ def register():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-        db = get_db
+        db = get_db()
         error = None
 
         if not username:
@@ -39,8 +39,8 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO usuario (username, email, password) VALUES (?, ?, ?)",
-                    (username, email, generate_password_hash(password))
+                    "INSERT INTO usuario (nome_usuario, email, senha, tipo_do_usuario) VALUES (?, ?, ?, ?)",
+                    (username, email, generate_password_hash(password), "f")
                 )
                 db.commit()
             except db.IntegrityError:
@@ -48,7 +48,7 @@ def register():
             else:
                 return redirect(url_for("auth.login"))
             
-        flask(error)
+        flash(error)
 
     return render_template('auth/register.html')
 
@@ -57,7 +57,7 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        db = get_db
+        db = get_db()
         error = None
 
         user = db.execute(
@@ -66,13 +66,13 @@ def login():
 
         if user is None:
             error = "Incorrect email."
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user['senha'], password):
             error = "Incorrect password"
         
         if error is None:
             session.clear()
             session['user_name'] = user['nome_usuario']
-            return redirect(url_for('index'))
+            return redirect(url_for('auth.login'))
         
         flash(error)
 
@@ -81,5 +81,5 @@ def login():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('auth.login'))
 

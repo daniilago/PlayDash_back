@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Eventos Cadastrados{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if events %}
+        {% for event in events %}
+            <li>{{  event['id_partida'], 
+                    event['data_horario'], 
+                    event['local_partida'], 
+                    event['time_casa_nome'],
+                    event['time_visitante_nome'],
+                    event['gols_casa'],
+                    event['gols_visitante']
+            }}</li>
+        {% endfor %}
+    {% else %}
+        <p>Nenhum evento cadastrado</p>
+    {% endif %}
+{% endblock %}

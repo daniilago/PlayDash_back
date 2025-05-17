@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Usuarios Cadastrados{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if users %}
+        {% for user in users %}
+            <li>{{ user['nome_usuario'], user['email'], user['tipo_do_usuario'] }}</li>
+        {% endfor %}
+    {% else %}
+        <p>Nenhum usuario cadastrado</p>
+    {% endif %}
+{% endblock %}

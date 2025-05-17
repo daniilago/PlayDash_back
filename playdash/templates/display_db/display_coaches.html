@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Tecnicos Cadastrados{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if coaches %}
+        {% for coach in coaches %}
+            <li>{{  coach['nome_tecnico'], 
+                    coach['data_nascimento'], 
+                    coach['nacionalidade'], 
+                    coach['foto'],
+                    coach['nome_time']
+            }}</li>
+        {% endfor %}
+    {% else %}
+        <p>Nenhum tecnico cadastrado</p>
+    {% endif %}
+{% endblock %}

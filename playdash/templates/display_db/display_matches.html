@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Partidas Cadastradas{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if matches %}
+        {% for match in matches %}
+            <li>{{  match['id_partida'], 
+                    match['data_horario'], 
+                    match['local_partida'], 
+                    match['time_casa_nome'],
+                    match['time_visitante_nome'],
+                    match['gols_casa'],
+                    match['gols_visitante']
+            }}</li>
+        {% endfor %}
+    {% else %}
+        <p>Nenhuma partida cadastrada</p>
+    {% endif %}
+{% endblock %}
