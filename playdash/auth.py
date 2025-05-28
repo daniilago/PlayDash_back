@@ -3,6 +3,7 @@ import functools
 from flask import(
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from playdash.db import get_db
@@ -72,7 +73,7 @@ def login():
         if error is None:
             session.clear()
             session['user_name'] = user['nome_usuario']
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('home.home'))
         
         flash(error)
 
@@ -81,5 +82,5 @@ def login():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('home.home'))
 

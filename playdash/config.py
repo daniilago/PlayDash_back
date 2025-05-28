@@ -1,1 +1,0 @@
-DATABASE = 'banco.sqlite3'

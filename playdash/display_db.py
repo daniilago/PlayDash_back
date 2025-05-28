@@ -1,8 +1,23 @@
-from flask import(Blueprint, render_template)
+from flask import(
+    Blueprint, render_template, url_for
+)
 
 from playdash.db import get_db
 
 bp = Blueprint('display_db', __name__, url_prefix='/display_db')
+
+@bp.route('/', methods=('GET', 'POST'))
+def display_db():
+    links =[
+        {"name": "Ver Usuários", "url": url_for('display_db.display_users')},
+        {"name": "Ver Times", "url": url_for('display_db.display_teams')},
+        {"name": "Ver Jogadores", "url": url_for('display_db.display_players')},
+        {"name": "Ver Treinadores", "url": url_for('display_db.display_coaches')},
+        {"name": "Ver Partidas", "url": url_for('display_db.display_matches')},
+        {"name": "Ver Eventos", "url": url_for('display_db.display_events')},
+    ]
+
+    return render_template('display_db/display_db.html', links=links)
 
 @bp.route('/users', methods=('GET', 'POST'))
 def display_users():

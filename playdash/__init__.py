@@ -22,15 +22,11 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.route('/')
-    @app.route('/home')
-    def hello():
-        return "<h1>Hello, World!</h1>"
-
     from . import db
     db.init_app(app)
 
-    from . import auth, display_db
+    from . import home, auth, display_db
+    app.register_blueprint(home.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(display_db.bp)
 

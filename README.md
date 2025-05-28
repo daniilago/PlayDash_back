@@ -9,22 +9,33 @@ Navegue até a pasta do projeto:
 cd PlayDash_back/
 ```
 
-### 1. Sincronize o ambiente virtual
+### 1. Instale o uv
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### 2. Sincronize o ambiente virtual
 
 ```bash
 uv sync
 ```
 Isso criará automaticamente um ambiente virtual e instalará as dependências listadas em `pyproject.toml`.
 
-### 2. Ative o ambiente virtual
+### 3. Ative o ambiente virtual
 
 ```bash
-source venv/bin/activate  # Linux/macOS
+source .venv/bin/activate  # Linux/macOS
 # ou
 venv\Scripts\activate     # Windows
 ```
 
-### 3. Exporte a variável do Flask
+Navegue até a pasta playdash: 
+```bash
+cd playdash/
+```
+
+### 4. Exporte a variável do Flask
 
 ```bash
 # Linux/macOS
@@ -35,7 +46,7 @@ set FLASK_APP=__init__.py
 $env:FLASK_APP="__init__.py"
 ```
 
-### 4. Execute o servidor
+### 5. Execute o servidor
 
 ```bash
 flask run
