@@ -45,8 +45,6 @@ def insert_teams():
             else:
                 error = f"Time '{team_name}' já existe"
                 flash(error)
-        else:
-            return redirect(url_for("auth.login"))
             
         if error is not None:
             flash(error)
@@ -83,8 +81,48 @@ def insert_matches():
 @bp.route('/events', methods=('GET', 'POST'))
 def insert_events():
     db = get_db()
-    events = db.execute(
-        'SELECT * FROM evento'
-    ).fetchall()
+    matches = db.execute('SELECT id_partida FROM partida').fetchall()
+    players = db.execute('SELECT numero, nome_time FROM jogador').fetchall()
+    event_types = ['Gol', 'Falta', 'Cartão Amarelo', 'Cartão Vermelho']
 
-    return render_template('insert/insert_events.html', events=events)
+    if request.method == 'POST':
+        event_id = request.form['event_id']
+        match_id = request.form['match_id']
+        date_hour = request.form['date_hour']
+        player_number = request.form['player_number']
+        player_team = request.form['player_team']
+        event_type = request.form['event_type']
+
+        error = None
+
+        if not event_id:
+            error = ''
+        elif not match_id:
+            error = ''
+        elif not date_hour:
+            error = ''
+        elif not player_number:
+            error = ''
+        elif not player_team:
+            error = ''
+        elif not event_type:
+            error = ''
+
+        if error is None:
+            existing_team = db.execute(
+                'SELECT 1 FROM evento WHERE id_evento = ? AND id_partida = ?', (event_id, match_id,)
+            ).fetchone()
+            if existing_team is None:
+                db.execute(
+                    'INSERT INTO evento (id_evento, id_partida, data_horario, jogador_numero, jogador_time, tipo_do_evento) VALUES (?, ?, ?, ?, ?, ?)',
+                    (event_id, match_id, date_hour, player_number, player_team, event_type)
+                )
+                db.commit()
+            else:
+                error = f"Evento já existe"
+                flash(error)
+            
+        if error is not None:
+            flash(error)
+
+    return render_template('insert/insert_events.html', matches=matches, players=players, event_types=event_types)
