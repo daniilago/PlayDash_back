@@ -31,6 +31,22 @@ def init_db_command():
     init_db()
     click.echo('Initialized the database.')
 
+@click.command('drop-db')
+def drop_db_command():
+    """Drop all tables from the database."""
+    db = get_db()
+    # Adapte os nomes das tabelas conforme seu schema.sql
+    db.executescript("""
+        DROP TABLE IF EXISTS evento;
+        DROP TABLE IF EXISTS partida;
+        DROP TABLE IF EXISTS tecnico;
+        DROP TABLE IF EXISTS jogador;
+        DROP TABLE IF EXISTS "time";
+        DROP TABLE IF EXISTS usuario;
+    """)
+    db.commit()
+    click.echo('Dropped all tables.')
+
 sqlite3.register_converter(
     "timestamp", lambda v: datetime.fromisoformat(v.decode())
 )
@@ -38,3 +54,4 @@ sqlite3.register_converter(
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(drop_db_command)
