@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Inserir Jogador{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        <label for="nome_jogador">Nome do Jogador</label>
+        <input type="text" name="nome_jogador" required>
+
+        <label for="data_nascimento">Data de Nascimento</label>
+        <input type="date" name="data_nascimento" required>
+
+        <label for="nacionalidade">Nacionalidade</label>
+        <input type="text" name="nacionalidade" required>
+
+        <label for="posicao">Posição</label>
+        <input type="text" name="posicao" required>
+
+        <label for="numero">Número</label>
+        <input type="number" name="numero" required>
+
+        <label for="nome_time">Time</label>
+        <select name="nome_time" required>
+            {% for team in teams %}
+                <option value="{{ team['nome_time'] }}">{{ team['nome_time'] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="foto">Foto</label>
+        <input type="file" name="foto" required>
+
+        <input type="submit" value="Registrar">
+    </form>
+
+    <hr>
+
+    <h2>Jogadores Cadastrados</h2>
+    <ul>
+        {% for player in players %}
+            <li>{{ player['nome_jogador'] }} - {{ player['posicao'] }} - #{{ player['numero'] }} ({{ player['nome_time'] }})</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
