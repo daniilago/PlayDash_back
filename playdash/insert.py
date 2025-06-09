@@ -11,6 +11,7 @@ import os
 bp = Blueprint('insert', __name__, url_prefix='/insert')
 EMBLEM_FOLDER = 'emblems'
 PLAYER_PHOTO_FOLDER = 'player_photos'
+COACH_PHOTO_FOLDER = 'coach_photos'
 
 @bp.route('/', methods=('GET', 'POST'))
 def insert():
@@ -68,29 +69,30 @@ def insert_teams():
 @bp.route('/players', methods=('GET', 'POST'))
 def insert_players():
     db = get_db()
-    error = None
+    
     if request.method == 'POST':
-        nome_jogador = request.form['nome_jogador']
-        data_nascimento = request.form['data_nascimento']
-        nacionalidade = request.form['nacionalidade']
-        posicao = request.form['posicao']
-        numero = request.form['numero']
-        nome_time = request.form['nome_time']
-        foto = request.files['foto']
+        player_name = request.form['player_name']
+        birth_date = request.form['birth_date']
+        nationality = request.form['nationality']
+        position = request.form['position']
+        number = request.form['number']
+        team_name = request.form['team_name']
+        photo = request.files['photo']
 
-        if not nome_jogador or not data_nascimento or not nacionalidade or not posicao or not numero or not nome_time:
+        error = None
+
+        if not player_name or not birth_date or not nationality or not position or not number or not team_name:
             error = 'Todos os campos são obrigatórios.'
-        elif 'foto' not in request.files or foto.filename == '':
+        elif 'photo' not in request.files or photo.filename == '':
             error = 'Foto é obrigatória.'
-        elif foto and not allowed_file(foto.filename):
+        elif photo and not allowed_file(photo.filename):
             error = 'Formato de imagem inválido.'
 
 
         if error is None:
-            nome_jogador = secure_filename(nome_jogador)
-            nome_jogador.replace('_', " ")
-            filename = secure_filename(nome_jogador.replace(" ", "_")) + os.path.splitext(foto.filename)[1]
-            foto.save(os.path.join(current_app.config['UPLOAD_FOLDER'], PLAYER_PHOTO_FOLDER, filename))
+            player_name = secure_filename(player_name.replace('_', " "))
+            filename = secure_filename(player_name.replace(" ", "_")) + os.path.splitext(photo.filename)[1]
+            photo.save(os.path.join(current_app.config['UPLOAD_FOLDER'], PLAYER_PHOTO_FOLDER, filename))
 
             try:
                 db.execute(
@@ -100,13 +102,13 @@ def insert_players():
                         foto, posicao, numero, nome_time
                     ) VALUES (?, ?, ?, ?, ?, ?, ?)
                     ''',
-                    (nome_jogador, data_nascimento, nacionalidade,
-                     filename, posicao, numero, nome_time)
+                    (player_name, birth_date, nationality,
+                     filename, position, number, team_name)
                 )
                 db.commit()
                 return redirect(url_for('insert.insert_players'))
             except db.IntegrityError:
-                error = f"Jogador com número {numero} já existe no time {nome_time}."
+                error = f"Jogador com número {number} já existe no time {team_name}."
 
         flash(error)
 
@@ -118,11 +120,49 @@ def insert_players():
 @bp.route('/coaches', methods=('GET', 'POST'))
 def insert_coaches():
     db = get_db()
-    coaches = db.execute(
-        'SELECT * FROM tecnico'
-    ).fetchall()
 
-    return render_template('insert/insert_coaches.html', coaches=coaches)
+    if request.method == 'POST':
+        coach_name = request.form['coach_name']
+        birth_date = request.form['birth_date']
+        nationality = request.form['nationality']
+        team_name = request.form['team_name']
+        photo = request.files['photo']
+
+        error = None
+
+        if not coach_name or not birth_date or not nationality or not team_name or not photo:
+            error = 'Todos os campos são obrigatórios.'
+        elif 'photo' not in request.files or photo.filename == '':
+            error = 'Foto é obrigatória.'
+        elif photo and not allowed_file(photo.filename):
+            error = 'Formato de imagem inválido.'
+
+        if error is None:
+            coach_name = secure_filename(coach_name.replace('_', " "))
+            filename = secure_filename(coach_name.replace(" ", "_")) + os.path.splitext(photo.filename)[1]
+            photo.save(os.path.join(current_app.config['UPLOAD_FOLDER'], COACH_PHOTO_FOLDER, filename))
+
+            try:
+                db.execute(
+                    '''
+                    INSERT INTO tecnico (
+                        nome_tecnico, data_nascimento, nacionalidade,
+                        foto, nome_time
+                    ) VALUES (?, ?, ?, ?, ?)
+                    ''',
+                    (coach_name, birth_date, nationality,
+                     filename, team_name)
+                )
+                db.commit()
+                return redirect(url_for('insert.insert_coaches'))
+            except db.IntegrityError:
+                error = f"Técnico {coach_name} já existe no time {team_name}."
+            
+        flash(error)
+    teams = db.execute('SELECT nome_time FROM "time"').fetchall()
+    coaches = db.execute('SELECT * FROM tecnico').fetchall()
+
+    return render_template('insert/insert_coaches.html', coaches=coaches, teams=teams)
 
 @bp.route('/matches', methods=('GET', 'POST'))
 def insert_matches():

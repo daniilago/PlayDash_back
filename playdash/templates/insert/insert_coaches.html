@@ -1,25 +1,19 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Inserir Jogador{% endblock %}</h1>
+    <h1>{% block title %}Inserir Técnico{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
     <form method="post" enctype="multipart/form-data">
-        <label for="player_name">Nome do Jogador</label>
-        <input type="text" name="player_name" id="player_name" required>
+        <label for="coach_name">Nome do Técnico</label>
+        <input type="text" name="coach_name" id="coach_name" required>
 
         <label for="birth_date">Data de Nascimento</label>
         <input type="date" name="birth_date" id="birth_date" required>
 
         <label for="nationality">Nacionalidade</label>
         <input type="text" name="nationality" id="nationality" required>
-
-        <label for="position">Posição</label>
-        <input type="text" name="position" id="position" required>
-
-        <label for="number">Número</label>
-        <input type="number" name="number" id="number" required>
 
         <label for="team_name">Time</label>
         <select name="team_name" id="team_name" required>
@@ -33,5 +27,5 @@
 
         <input type="submit" value="Register">
     </form>
-
+    
 {% endblock %}
