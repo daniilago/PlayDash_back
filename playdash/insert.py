@@ -168,57 +168,111 @@ def insert_coaches():
 @bp.route('/matches', methods=('GET', 'POST'))
 def insert_matches():
     db = get_db()
-    matches = db.execute(
-        'SELECT * FROM partida'
-    ).fetchall()
+    error = None
 
-    return render_template('insert/insert_matches.html', matches=matches)
+    if request.method == 'POST':
+        match_datetime = request.form['match_datetime']
+        match_location = request.form['match_location']
+        home_team = request.form['home_team']
+        away_team = request.form['away_team']
+
+        if not match_datetime or not match_location or not home_team or not away_team:
+            error = 'All fields are required.'
+        elif home_team == away_team:
+            error = 'Home and away teams must be different.'
+
+        if error is None:
+            try:
+                db.execute(
+                    '''
+                    INSERT INTO partida (
+                        data_horario, local_partida,
+                        time_casa_nome, time_visitante_nome
+                    ) VALUES (?, ?, ?, ?)
+                    ''',
+                    (match_datetime, match_location, home_team, away_team)
+                )
+                db.commit()
+                return redirect(url_for('insert.insert_matches'))
+            except db.IntegrityError as e:
+                error = 'An error occurred while inserting the match.'
+
+        flash(error)
+
+    teams = db.execute('SELECT nome_time FROM "time"').fetchall()
+    matches = db.execute('SELECT * FROM partida').fetchall()
+
+    return render_template('insert/insert_matches.html', matches=matches, teams=teams)
+
 
 @bp.route('/events', methods=('GET', 'POST'))
 def insert_events():
     db = get_db()
-    matches = db.execute('SELECT id_partida FROM partida').fetchall()
-    players = db.execute('SELECT numero, nome_time FROM jogador').fetchall()
-    event_types = ['Gol', 'Falta', 'Cartão Amarelo', 'Cartão Vermelho']
+    error = None
 
     if request.method == 'POST':
-        event_id = request.form['event_id']
         match_id = request.form['match_id']
         date_hour = request.form['date_hour']
         player_number = request.form['player_number']
         player_team = request.form['player_team']
         event_type = request.form['event_type']
 
-        error = None
-
-        if not event_id:
-            error = ''
-        elif not match_id:
-            error = ''
+        if not match_id:
+            error = 'Match ID is required.'
         elif not date_hour:
-            error = ''
+            error = 'Date and time are required.'
         elif not player_number:
-            error = ''
+            error = 'Player number is required.'
         elif not player_team:
-            error = ''
+            error = 'Player team is required.'
         elif not event_type:
-            error = ''
+            error = 'Event type is required.'
 
         if error is None:
-            existing_team = db.execute(
-                'SELECT 1 FROM evento WHERE id_evento = ? AND id_partida = ?', (event_id, match_id,)
-            ).fetchone()
-            if existing_team is None:
+            # Mapear tipos de evento para prefixos
+            event_prefix_map = {
+                'gol': 1,
+                'falta': 2,
+                'cartao_amarelo': 3,
+                'cartao_vermelho': 4
+            }
+
+            # Obter o prefixo do tipo de evento
+            event_prefix = event_prefix_map.get(event_type)
+            if event_prefix is None:
+                error = 'Invalid event type.'
+            else:
+                # Calcular o próximo ID do evento
+                prefix = f"{event_prefix}0000"  # Exemplo: 10000 para gols
+                last_event = db.execute(
+                    '''
+                    SELECT id_evento FROM evento
+                    WHERE id_evento >= ? AND id_evento < ?
+                    ORDER BY id_evento DESC LIMIT 1
+                    ''',
+                    (int(prefix), int(prefix) + 10000)
+                ).fetchone()
+
+                if last_event:
+                    next_id = last_event['id_evento'] + 1
+                else:
+                    next_id = int(prefix)  # Primeiro ID para este tipo de evento
+
+                # Inserir o evento no banco de dados
                 db.execute(
-                    'INSERT INTO evento (id_evento, id_partida, data_horario, jogador_numero, jogador_time, tipo_do_evento) VALUES (?, ?, ?, ?, ?, ?)',
-                    (event_id, match_id, date_hour, player_number, player_team, event_type)
+                    '''
+                    INSERT INTO evento (id_evento, id_partida, data_horario, jogador_numero, jogador_time, tipo_do_evento)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    ''',
+                    (next_id, match_id, date_hour, player_number, player_team, event_type)
                 )
                 db.commit()
-            else:
-                error = f"Evento já existe"
-                flash(error)
-            
-        if error is not None:
-            flash(error)
+                return redirect(url_for('insert.insert_events'))
+
+        flash(error)
+
+    matches = db.execute('SELECT id_partida FROM partida').fetchall()
+    players = db.execute('SELECT numero AS jogador_numero, nome_time FROM jogador').fetchall()
+    event_types = ['gol', 'falta', 'cartao_amarelo', 'cartao_vermelho']
 
     return render_template('insert/insert_events.html', matches=matches, players=players, event_types=event_types)

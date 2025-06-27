@@ -49,7 +49,7 @@ $env:FLASK_APP="__init__.py"
 ### 5. Execute o servidor
 
 ```bash
-flask run
+flask run --debug
 ```
 Acesse o servidor a partir da porta gerada no navegador.
 

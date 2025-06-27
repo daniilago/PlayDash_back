@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Insert Match{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <label for="match_datetime">Data e Hora</label>
+        <input type="datetime-local" name="match_datetime" id="match_datetime" required>
+
+        <label for="match_location">Lugar</label>
+        <input type="text" name="match_location" id="match_location" required>
+
+        <label for="home_team">Time da Casa</label>
+        <select name="home_team" id="home_team" required>
+            {% for team in teams %}
+                <option value="{{ team['nome_time'] }}">{{ team['nome_time'] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="away_team">Time Visitante</label>
+        <select name="away_team" id="away_team" required>
+            {% for team in teams %}
+                <option value="{{ team['nome_time'] }}">{{ team['nome_time'] }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" value="Register Match">
+    </form>
+
+{% endblock %}

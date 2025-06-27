@@ -46,6 +46,7 @@ def drop_db_command():
     """)
     db.commit()
     click.echo('Dropped all tables.')
+    
 
 sqlite3.register_converter(
     "timestamp", lambda v: datetime.fromisoformat(v.decode())

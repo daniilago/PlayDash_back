@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Delete Teams</h1>
+{% endblock %}
+
+{% block content %}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if teams %}
+    <ul>
+      {% for team in teams %}
+        <li>
+          <strong>{{ team['nome_time'] }}</strong>
+          <form method="post" style="display:inline;">
+            <input type="hidden" name="team_name" value="{{ team['nome_time'] }}">
+            <button type="submit" onclick="return confirm('Are you sure you want to delete {{ team['nome_time'] }}?')">
+              Delete
+            </button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No teams found.</p>
+  {% endif %}
+{% endblock %}

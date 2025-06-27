@@ -39,7 +39,7 @@ CREATE TABLE jogador (
 
     CONSTRAINT jogador_pkey PRIMARY KEY (numero, nome_time),
     CONSTRAINT jogador_nome_time_fkey FOREIGN KEY (nome_time) 
-        REFERENCES "time"(nome_time)
+        REFERENCES "time"(nome_time) ON DELETE CASCADE
 );
 
 CREATE TABLE tecnico (
@@ -51,7 +51,7 @@ CREATE TABLE tecnico (
 
     CONSTRAINT tecnico_pkey PRIMARY KEY (nome_time),
     CONSTRAINT tecnico_nome_time_fkey FOREIGN KEY (nome_time) 
-        REFERENCES "time"(nome_time)
+        REFERENCES "time"(nome_time) ON DELETE CASCADE
 );
 
 CREATE TABLE partida (
