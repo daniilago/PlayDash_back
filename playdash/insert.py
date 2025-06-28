@@ -18,7 +18,7 @@ def insert():
     links =[
         {"name": "Inserir Time", "url": url_for('insert.insert_teams')},
         {"name": "Inserir Jogador", "url": url_for('insert.insert_players')},
-        {"name": "Inserir Treinador", "url": url_for('insert.insert_coaches')},
+        {"name": "Inserir Técnico", "url": url_for('insert.insert_coaches')},
         {"name": "Inserir Partida", "url": url_for('insert.insert_matches')},
         {"name": "Inserir Evento", "url": url_for('insert.insert_events')},
     ]
@@ -258,7 +258,8 @@ def insert_events():
                 else:
                     next_id = int(prefix)  # Primeiro ID para este tipo de evento
 
-                # Inserir o evento no banco de dados
+            try:
+            # Inserir o evento no banco de dados
                 db.execute(
                     '''
                     INSERT INTO evento (id_evento, id_partida, data_horario, jogador_numero, jogador_time, tipo_do_evento)
@@ -268,6 +269,8 @@ def insert_events():
                 )
                 db.commit()
                 return redirect(url_for('insert.insert_events'))
+            except db.IntegrityError as e:
+                error = 'An error occurred while inserting the event.'
 
         flash(error)
 

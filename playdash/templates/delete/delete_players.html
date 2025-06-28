@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Deletar Jogador</h1>
+{% endblock %}
+
+{% block content %}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if players %}
+    <ul>
+      {% for player in players %}
+        <li>
+          <strong>{{ player['nome_jogador'] }} (Number: {{ player['numero'] }}) - Team: {{ player['nome_time'] }}</strong>
+          <form method="post" style="display:inline;">
+            <input type="hidden" name="number" value="{{ player['numero'] }}">
+            <input type="hidden" name="team_name" value="{{ player['nome_time'] }}">
+            <button type="submit" onclick="return confirm('Delete player {{ player['nome_jogador'] }}?')">Delete</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No players found.</p>
+  {% endif %}
+{% endblock %}

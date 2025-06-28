@@ -8,7 +8,7 @@
     {% if matches %}
         {% for match in matches %}
             <li>{{  match['id_partida'], 
-                    match['data_horario'], 
+                    match['data_horario'].strftime('%d/%m/%Y %H:%M'), 
                     match['local_partida'], 
                     match['time_casa_nome'],
                     match['time_visitante_nome'],

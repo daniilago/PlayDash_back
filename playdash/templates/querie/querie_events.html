@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Consulta de Eventos</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="event_type">Tipo de Evento:</label>
+    <input type="text" name="event_type" id="event_type" placeholder="Ex: Gol, Falta, Cartão...">
+    
+    <label for="player_name">Nome do Jogador:</label>
+    <input type="text" name="player_name" id="player_name" placeholder="Digite o nome do jogador...">
+    
+    <label for="match_id">ID da Partida:</label>
+    <input type="number" name="match_id" id="match_id" placeholder="Digite o ID da partida...">
+    
+    <button type="submit">Buscar</button>
+  </form>
+
+  {% if events %}
+    <h2>Eventos encontrados:</h2>
+    <ul>
+      {% for event in events %}
+        <li>
+          <strong>Evento ID:</strong> {{ event['id_evento'] }}<br>
+          <strong>Partida ID:</strong> {{ event['id_partida'] }}<br>
+          <strong>Tipo do Evento:</strong> {{ event['tipo_do_evento'] }}<br>
+          <strong>Jogador:</strong> {{ event['nome_jogador'] }}<br>
+          <strong>Time:</strong> {{ event['jogador_time'] }}<br>
+          <strong>Data e Horário:</strong> {{ event['data_horario'] }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nenhum evento encontrado.</p>
+  {% endif %}
+{% endblock %}

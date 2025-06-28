@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Consulta de Partidas</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="location">Local da Partida:</label>
+    <input type="text" name="location" id="location" placeholder="Ex: Maracanã">
+
+    <label for="team1">Time 1:</label>
+    <input type="text" name="team1" id="team1" placeholder="Ex: Flamengo">
+
+    <label for="team2">Time 2:</label>
+    <input type="text" name="team2" id="team2" placeholder="Ex: Vasco">
+
+    <button type="submit">Buscar</button>
+  </form>
+
+  {% if matches %}
+    <h2>Partidas Encontradas:</h2>
+    <ul>
+      {% for match in matches %}
+        <li>
+          <strong>ID {{ match['id_partida'] }}</strong><br>
+          {{ match['time_casa_nome'] }} ({{ match['gols_casa'] }}) x ({{ match['gols_visitante'] }}) {{ match['time_visitante_nome'] }}<br>
+          Local: {{ match['local_partida'] }}<br>
+          Data e Hora: {{ match['data_horario'].strftime('%d/%m/%Y %H:%M') }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nenhuma partida encontrada.</p>
+  {% endif %}
+{% endblock %}

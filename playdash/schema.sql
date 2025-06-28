@@ -39,7 +39,9 @@ CREATE TABLE jogador (
 
     CONSTRAINT jogador_pkey PRIMARY KEY (numero, nome_time),
     CONSTRAINT jogador_nome_time_fkey FOREIGN KEY (nome_time) 
-        REFERENCES "time"(nome_time) ON DELETE CASCADE
+        REFERENCES "time"(nome_time) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE tecnico (
@@ -51,7 +53,9 @@ CREATE TABLE tecnico (
 
     CONSTRAINT tecnico_pkey PRIMARY KEY (nome_time),
     CONSTRAINT tecnico_nome_time_fkey FOREIGN KEY (nome_time) 
-        REFERENCES "time"(nome_time) ON DELETE CASCADE
+        REFERENCES "time"(nome_time) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE partida (
@@ -65,9 +69,13 @@ CREATE TABLE partida (
 
     CONSTRAINT partida_pkey PRIMARY KEY (id_partida),
     CONSTRAINT partida_time_casa_nome_fkey FOREIGN KEY (time_casa_nome) 
-        REFERENCES "time"(nome_time),
+        REFERENCES "time"(nome_time)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT partida_time_visitante_nome_fkey FOREIGN KEY (time_visitante_nome) 
         REFERENCES "time"(nome_time)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE evento (
@@ -80,7 +88,11 @@ CREATE TABLE evento (
 
     CONSTRAINT evento_pkey PRIMARY KEY (id_evento, id_partida),
     CONSTRAINT evento_id_partida_fkey FOREIGN KEY (id_partida) 
-        REFERENCES partida(id_partida),
+        REFERENCES partida(id_partida)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT evento_jogador_numero_jogador_time_fkey FOREIGN KEY (jogador_numero, jogador_time)
         REFERENCES jogador(numero, nome_time)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );

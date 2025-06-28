@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Consulta de Técnicos</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="team_name">Time:</label>
+    <input type="text" name="team_name" id="team_name" placeholder="Nome do time">
+
+    <label for="coach_name">Nome do Técnico:</label>
+    <input type="text" name="coach_name" id="coach_name" placeholder="Digite o nome...">
+
+    <button type="submit">Buscar</button>
+  </form>
+
+  {% if coaches %}
+    <h2>Técnicos encontrados:</h2>
+    <ul>
+      {% for coach in coaches %}
+        <li>
+          <strong>{{ coach['nome_tecnico'] }}</strong><br>
+          Time: {{ coach['nome_time'] }}<br>
+          Nascimento: {{ coach['data_nascimento'].strftime('%d/%m/%Y') }}<br>
+          Nacionalidade: {{ coach['nacionalidade'] }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nenhum técnico encontrado.</p>
+  {% endif %}
+{% endblock %}

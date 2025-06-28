@@ -6,16 +6,17 @@
 
 {% block content %}
     {% if events %}
+        <ul>
         {% for event in events %}
-            <li>{{  event['id_partida'], 
-                    event['data_horario'], 
-                    event['local_partida'], 
-                    event['time_casa_nome'],
-                    event['time_visitante_nome'],
-                    event['gols_casa'],
-                    event['gols_visitante']
+            <li>{{  event['id_evento'],
+                    event['id_partida'],
+                    event['data_horario'].strftime('%d/%m/%Y %H:%M'),
+                    event['jogador_numero'],
+                    event['jogador_time'],
+                    event['tipo_do_evento']
             }}</li>
         {% endfor %}
+        </ul>
     {% else %}
         <p>Nenhum evento cadastrado</p>
     {% endif %}

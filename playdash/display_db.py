@@ -12,7 +12,7 @@ def display_db():
         {"name": "Ver Usuários", "url": url_for('display_db.display_users')},
         {"name": "Ver Times", "url": url_for('display_db.display_teams')},
         {"name": "Ver Jogadores", "url": url_for('display_db.display_players')},
-        {"name": "Ver Treinadores", "url": url_for('display_db.display_coaches')},
+        {"name": "Ver Técnicos", "url": url_for('display_db.display_coaches')},
         {"name": "Ver Partidas", "url": url_for('display_db.display_matches')},
         {"name": "Ver Eventos", "url": url_for('display_db.display_events')},
     ]

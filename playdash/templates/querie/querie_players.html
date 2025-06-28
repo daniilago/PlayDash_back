@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Consulta de Jogadores</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="player_name">Nome do Jogador:</label>
+    <input type="text" name="player_name" id="player_name" placeholder="Ex: Neymar">
+
+    <label for="number">Número:</label>
+    <input type="number" name="number" id="number" placeholder="Ex: 10">
+
+    <label for="team_name">Time:</label>
+    <input type="text" name="team_name" id="team_name" placeholder="Ex: Brasil FC">
+
+    <button type="submit">Buscar</button>
+  </form>
+
+  {% if players %}
+    <h2>Jogadores encontrados:</h2>
+    <ul>
+      {% for player in players %}
+        <li>
+          <strong>{{ player['nome_jogador'] }}</strong><br>
+          Nº {{ player['numero'] }} | {{ player['posicao'] }}<br>
+          Time: {{ player['nome_time'] }}<br>
+          Nascimento: {{ player['data_nascimento'].strftime('%d/%m/%Y') }}<br>
+          Nacionalidade: {{ player['nacionalidade'] }}<br>
+          Gols: {{ player['gols'] }} | Faltas: {{ player['faltas'] }}<br>
+          Amarelos: {{ player['cartoes_amarelos'] }} | Vermelhos: {{ player['cartoes_vermelhos'] }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nenhum jogador encontrado.</p>
+  {% endif %}
+{% endblock %}

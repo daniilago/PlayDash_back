@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Consulta de Times</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="team_name">Nome do Time:</label>
+    <input type="text" name="team_name" id="team_name" placeholder="Digite o nome...">
+    <button type="submit">Buscar</button>
+  </form>
+
+  {% if teams %}
+    <h2>Times encontrados:</h2>
+    <ul>
+      {% for team in teams %}
+        <li>
+          <strong>{{ team['nome_time'] }}</strong><br>
+          Total Partidas: {{ team['total_partidas'] }} |
+          Pontos: {{ team['total_pontos'] }} |
+          Faltas: {{ team['faltas'] }}<br>
+          Cartões Amarelos: {{ team['cartoes_amarelos_time'] }} |
+          Cartões Vermelhos: {{ team['cartoes_vermelhos_time'] }}<br>
+          Vitórias: {{ team['vitorias'] }} |
+          Empates: {{ team['empates'] }} |
+          Derrotas: {{ team['derrotas'] }}<br>
+          Gols Pró: {{ team['gols_pro'] }} |
+          Gols Contra: {{ team['gols_contra'] }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nenhum time encontrado.</p>
+  {% endif %}
+{% endblock %}

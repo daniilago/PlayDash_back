@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>Deletar time</h1>
+  <h1>Deletar Técnico</h1>
 {% endblock %}
 
 {% block content %}
@@ -15,21 +15,19 @@
     {% endif %}
   {% endwith %}
 
-  {% if teams %}
+  {% if coaches %}
     <ul>
-      {% for team in teams %}
+      {% for coach in coaches %}
         <li>
-          <strong>{{ team['nome_time'] }}</strong>
+          <strong>{{ coach['nome_tecnico'] }} - Team: {{ coach['nome_time'] }}</strong>
           <form method="post" style="display:inline;">
-            <input type="hidden" name="team_name" value="{{ team['nome_time'] }}">
-            <button type="submit" onclick="return confirm('Are you sure you want to delete {{ team['nome_time'] }}?')">
-              Delete
-            </button>
+            <input type="hidden" name="coach_name" value="{{ coach['nome_tecnico'] }}">
+            <button type="submit" onclick="return confirm('Delete coach {{ coach['nome_tecnico'] }}?')">Delete</button>
           </form>
         </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>No teams found.</p>
+    <p>No coaches found.</p>
   {% endif %}
 {% endblock %}

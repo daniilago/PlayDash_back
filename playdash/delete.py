@@ -8,11 +8,11 @@ bp = Blueprint('delete', __name__, url_prefix='/delete')
 @bp.route('/', methods=('GET',))
 def delete():
     links = [
-        {"name": "Delete Team", "url": url_for('delete.delete_teams')},
-        {"name": "Delete Player", "url": url_for('delete.delete_players')},
-        {"name": "Delete Coach", "url": url_for('delete.delete_coaches')},
-        {"name": "Delete Match", "url": url_for('delete.delete_matches')},
-        {"name": "Delete Event", "url": url_for('delete.delete_events')},
+        {"name": "Deletar Time", "url": url_for('delete.delete_teams')},
+        {"name": "Deletar Jogador", "url": url_for('delete.delete_players')},
+        {"name": "Deletar Técnico", "url": url_for('delete.delete_coaches')},
+        {"name": "Deletar Partida", "url": url_for('delete.delete_matches')},
+        {"name": "Deletar Evento", "url": url_for('delete.delete_events')},
     ]
     return render_template('delete/delete.html', links=links)
 
@@ -23,8 +23,8 @@ def delete_teams():
         team_name = request.form['team_name']
         db.execute('DELETE FROM "time" WHERE nome_time = ?', (team_name,))
         db.commit()
-        flash(f'Team {team_name} deleted.')
-        return render_template('delete/delete_teams.html', teams=teams)
+        flash(f'Time {team_name} deletado.')
+        return redirect(url_for('delete.delete_teams'))
 
     teams = db.execute('SELECT * FROM "time"').fetchall()
     return render_template('delete/delete_teams.html', teams=teams)
@@ -37,7 +37,7 @@ def delete_players():
         team_name = request.form['team_name']
         db.execute('DELETE FROM jogador WHERE numero = ? AND nome_time = ?', (number, team_name))
         db.commit()
-        flash('Player deleted.')
+        flash('Jogador deletado.')
         return redirect(url_for('delete.delete_players'))
 
     players = db.execute('SELECT * FROM jogador').fetchall()
@@ -50,11 +50,12 @@ def delete_coaches():
         coach_name = request.form['coach_name']
         db.execute('DELETE FROM tecnico WHERE nome_tecnico = ?', (coach_name,))
         db.commit()
-        flash('Coach deleted.')
+        flash('Técnico deletado.')
         return redirect(url_for('delete.delete_coaches'))
 
     coaches = db.execute('SELECT * FROM tecnico').fetchall()
     return render_template('delete/delete_coaches.html', coaches=coaches)
+
 
 @bp.route('/matches', methods=('GET', 'POST'))
 def delete_matches():
@@ -63,7 +64,7 @@ def delete_matches():
         match_id = request.form['match_id']
         db.execute('DELETE FROM partida WHERE id_partida = ?', (match_id,))
         db.commit()
-        flash('Match deleted.')
+        flash('Partida deletada.')
         return redirect(url_for('delete.delete_matches'))
 
     matches = db.execute('SELECT * FROM partida').fetchall()
@@ -76,21 +77,8 @@ def delete_events():
         event_id = request.form['event_id']
         db.execute('DELETE FROM evento WHERE id_evento = ?', (event_id,))
         db.commit()
-        flash('Event deleted.')
+        flash('Evento deletado.')
         return redirect(url_for('delete.delete_events'))
 
     events = db.execute('SELECT * FROM evento').fetchall()
     return render_template('delete/delete_events.html', events=events)
-
-@bp.route('/users', methods=('GET', 'POST'))
-def delete_users():
-    db = get_db()
-    if request.method == 'POST':
-        username = request.form['username']
-        db.execute('DELETE FROM usuario WHERE username = ?', (username,))
-        db.commit()
-        flash('User deleted.')
-        return redirect(url_for('delete.delete_users'))
-
-    users = db.execute('SELECT * FROM usuario').fetchall()
-    return render_template('delete/delete_users.html', users=users)
