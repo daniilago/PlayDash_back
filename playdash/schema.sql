@@ -26,7 +26,7 @@ CREATE TABLE "time" (
 
 CREATE TABLE jogador (
     nome_jogador character varying(100) NOT NULL,
-    data_nascimento timestamp NOT NULL,
+    data_nascimento date NOT NULL,
     nacionalidade character varying(20) NOT NULL,
     foto text NOT NULL,
     gols integer NOT NULL DEFAULT 0,
@@ -46,7 +46,7 @@ CREATE TABLE jogador (
 
 CREATE TABLE tecnico (
     nome_tecnico character varying(100) NOT NULL,
-    data_nascimento timestamp without time zone NOT NULL,
+    data_nascimento date NOT NULL,
     nacionalidade character varying(20) NOT NULL,
     foto text NOT NULL,
     nome_time character varying(100) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE tecnico (
 
 CREATE TABLE partida (
     id_partida integer NOT NULL,
-    data_horario timestamp without time zone NOT NULL,
+    data_horario timestamp NOT NULL,
     local_partida character varying(100) NOT NULL,
     time_casa_nome character varying(100) NOT NULL,
     time_visitante_nome character varying(100) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE partida (
 CREATE TABLE evento (
     id_evento integer NOT NULL,
     id_partida integer NOT NULL,
-    data_horario timestamp without time zone NOT NULL,
+    data_horario date NOT NULL,
     jogador_numero integer NOT NULL,
     jogador_time character varying(100) NOT NULL,
     tipo_do_evento character varying(20) NOT NULL,

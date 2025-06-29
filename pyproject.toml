@@ -6,4 +6,6 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "flask",
+    "flask-openapi3[swagger]>=4.2.0",
+    "pydantic>=2.11.7",
 ]
