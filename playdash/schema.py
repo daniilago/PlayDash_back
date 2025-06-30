@@ -39,13 +39,13 @@ class Team(BaseSchema):
 
 class Player(BaseSchema):
     name: str
-    date_of_birth: str
+    date_of_birth: date
     nationality: str
     photo: Url
     goals: int
     position: str
-    number: str
-    fouls: str
+    number: int
+    fouls: int
     yellow_cards: int
     red_cards: int
     team: str
