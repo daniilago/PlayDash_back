@@ -1,3 +1,4 @@
+from flask import Request
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
 from flask_openapi3.blueprint import APIBlueprint
@@ -50,6 +51,12 @@ def get_one_user(path: PathName):
         "SELECT * FROM usuario WHERE nome_usuario=?", [path.name]
     ).fetchone()
     return User.models_to_json(User.from_db(user))
+
+
+@bp.post("/user/")
+def create_user(request: Request):
+    data = User(**request.json)
+    db.execute("insert into ")
 
 
 @bp.get(
