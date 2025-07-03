@@ -4,12 +4,19 @@ from playdash.db import get_db
 from playdash import ALLOWED_EXTENSIONS
 from werkzeug.utils import secure_filename
 from flask import current_app
+from pathlib import Path
 import os
 
 bp = Blueprint("insert", __name__, url_prefix="/insert")
-EMBLEM_FOLDER = "emblems"
-PLAYER_PHOTO_FOLDER = "player_photos"
-COACH_PHOTO_FOLDER = "coach_photos"
+
+
+def save_file(name: str, file):
+    filename = secure_filename(name) + os.path.splitext(file.filename)[1]
+    file_path = Path(current_app.config["UPLOAD_FOLDER"]) / filename
+    os.makedirs(file_path.parent, exist_ok=True)
+
+    file.save(file_path)
+    return filename
 
 
 @bp.route("/", methods=("GET", "POST"))
@@ -49,21 +56,15 @@ def insert_teams():
             team_name = secure_filename(team_name)
             team_name.replace("_", " ")
             existing_team = db.execute(
-                'SELECT 1 FROM team WHERE name = ?', (team_name,)
+                "SELECT 1 FROM team WHERE name = ?", (team_name,)
             ).fetchone()
+            print(team_name, existing_team)
             if existing_team:
                 error = f"Time '{team_name}' já existe"
             else:
-                filename = (
-                    team_name.replace(" ", "_") + os.path.splitext(emblem.filename)[1]
-                )
-                emblem.save(
-                    os.path.join(
-                        current_app.config["UPLOAD_FOLDER"], EMBLEM_FOLDER, filename
-                    )
-                )
+                filename = save_file(team_name, emblem)
                 db.execute(
-                    'INSERT INTO team (name, emblem) VALUES (?, ?)',
+                    "INSERT INTO team (name, emblem) VALUES (?, ?)",
                     (team_name, filename),
                 )
                 db.commit()
@@ -103,14 +104,7 @@ def insert_players():
             error = "Formato de imagem inválido."
 
         if error is None:
-            player_name = secure_filename(player_name)
-            player_name = player_name.replace("_", " ")
-            filename = (
-                team_name.replace(" ", "_")
-                + "_"
-                + secure_filename(shirt_number)
-                + os.path.splitext(photo.filename)[1]
-            )
+            filename = save_file(team_name + player_name + str(shirt_number), photo)
 
             try:
                 db.execute(
@@ -131,20 +125,15 @@ def insert_players():
                     ),
                 )
                 db.commit()
-                photo.save(
-                    os.path.join(
-                        current_app.config["UPLOAD_FOLDER"],
-                        PLAYER_PHOTO_FOLDER,
-                        filename,
-                    )
-                )
                 return redirect(url_for("insert.insert_players"))
             except db.IntegrityError:
-                error = f"Jogador com número {shirt_number} já existe no time {team_name}."
+                error = (
+                    f"Jogador com número {shirt_number} já existe no time {team_name}."
+                )
 
         flash(error)
 
-    teams = db.execute('SELECT name FROM team').fetchall()
+    teams = db.execute("SELECT name FROM team").fetchall()
     players = db.execute("SELECT * FROM player").fetchall()
 
     return render_template("insert/insert_players.html", players=players, teams=teams)
@@ -177,13 +166,7 @@ def insert_coaches():
             error = "Formato de imagem inválido."
 
         if error is None:
-            coach_name = secure_filename(coach_name)
-            coach_name = coach_name.replace("_", " ")
-            filename = (
-                secure_filename(team_name.replace(" ", "_"))
-                + "_coach"
-                + os.path.splitext(photo.filename)[1]
-            )
+            filename = save_file(coach_name, photo)
             try:
                 db.execute(
                     """
@@ -195,19 +178,12 @@ def insert_coaches():
                     (coach_name, birth_date, nationality, filename, team_name),
                 )
                 db.commit()
-                photo.save(
-                    os.path.join(
-                        current_app.config["UPLOAD_FOLDER"],
-                        COACH_PHOTO_FOLDER,
-                        filename,
-                    )
-                )
                 return redirect(url_for("insert.insert_coaches"))
             except db.IntegrityError:
                 error = f"Já existe um técnico no time {team_name}."
 
         flash(error)
-    teams = db.execute('SELECT name FROM team').fetchall()
+    teams = db.execute("SELECT name FROM team").fetchall()
     coaches = db.execute("SELECT * FROM coach").fetchall()
 
     return render_template("insert/insert_coaches.html", coaches=coaches, teams=teams)
@@ -247,7 +223,7 @@ def insert_matches():
 
         flash(error)
 
-    teams = db.execute('SELECT name FROM team').fetchall()
+    teams = db.execute("SELECT name FROM team").fetchall()
     matches = db.execute("SELECT * FROM match").fetchall()
 
     return render_template("insert/insert_matches.html", matches=matches, teams=teams)
