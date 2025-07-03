@@ -233,7 +233,7 @@ def get_worst_player():
 def get_player_fair_play():
     db = get_db()
     player = db.execute("""SELECT * FROM player
-                        red_cards ASC, yellow_cards ASC, fouls ASC
+                        ORDER BY red_cards ASC, yellow_cards ASC, fouls ASC
                         LIMIT 1""").fetchone()
     return Player.models_to_json(Player.from_db(player))
 
@@ -247,7 +247,7 @@ def get_player_fair_play():
 def get_player_foul_play():
     db = get_db()
     player = db.execute("""SELECT * FROM player
-                        red_cards DESC, yellow_cards DESC, fouls DESC
+                        ORDER BY red_cards DESC, yellow_cards DESC, fouls DESC
                         LIMIT 1""").fetchone()
     return Player.models_to_json(Player.from_db(player))
 
@@ -261,7 +261,7 @@ def get_player_foul_play():
 def get_team_fair_play():
     db = get_db()
     team = db.execute("""SELECT * FROM team
-                        red_cards ASC, yellow_cards ASC, fouls ASC
+                        ORDER BY red_cards ASC, yellow_cards ASC, fouls ASC
                         LIMIT 1""").fetchone()
     return Team.models_to_json(Team.from_db(team))
 
@@ -275,6 +275,6 @@ def get_team_fair_play():
 def get_team_foul_play():
     db = get_db()
     team = db.execute("""SELECT * FROM team
-                        red_cards DESCellow_cards DESCouls DESC
+                        ORDER BY red_cards DESC, yellow_cards DESC, fouls DESC
                         LIMIT 1""").fetchone()
     return Team.models_to_json(Team.from_db(team))
