@@ -47,9 +47,7 @@ def get_all_users() -> list[User]:
 )
 def get_one_user(path: PathName):
     db = get_db()
-    user = db.execute(
-        "SELECT * FROM user WHERE name=?", [path.name]
-    ).fetchone()
+    user = db.execute("SELECT * FROM user WHERE name=?", [path.name]).fetchone()
     return User.models_to_json(User.from_db(user))
 
 
@@ -59,9 +57,9 @@ def get_one_user(path: PathName):
     tags=[team_tag],
     responses={200: RootModel[list[Team]]},
 )
-def get_all_teams() -> list[Team]:
+def get_all_teams():
     db = get_db()
-    teams = db.execute("SELECT * FROM team ").fetchall()
+    teams = db.execute("SELECT * FROM team").fetchall()
     return Team.models_to_json([Team.from_db(val) for val in teams])
 
 
@@ -97,9 +95,7 @@ def get_all_players() -> list[Player]:
 )
 def get_one_player(path: PathName):
     db = get_db()
-    player = db.execute(
-        "SELECT * FROM player WHERE name=?", [path.name]
-    ).fetchone()
+    player = db.execute("SELECT * FROM player WHERE name=?", [path.name]).fetchone()
     return Player.models_to_json(Player.from_db(player))
 
 
@@ -123,9 +119,7 @@ def get_all_coaches() -> list[Coach]:
 )
 def get_one_coach(path: PathName):
     db = get_db()
-    coach = db.execute(
-        "SELECT * FROM coach WHERE name=?", [path.name]
-    ).fetchone()
+    coach = db.execute("SELECT * FROM coach WHERE name=?", [path.name]).fetchone()
     return Coach.models_to_json(Coach.from_db(coach))
 
 

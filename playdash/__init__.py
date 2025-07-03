@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_openapi3 import OpenAPI
 
 UPLOAD_FOLDER = "images"
@@ -41,5 +41,14 @@ def create_app(test_config=None):
     app.register_blueprint(delete.bp)
     app.register_blueprint(querie.bp)
     app.register_api(api.bp)
+
+    @app.route("/public/<path:path>")
+    def public_files(path):
+        from pathlib import Path
+
+        assert path is not None
+        return send_from_directory(Path(UPLOAD_FOLDER).absolute(), path)
+
+    del public_files
 
     return app

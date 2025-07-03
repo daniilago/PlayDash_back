@@ -30,7 +30,7 @@ def display_users():
 @bp.route("/teams", methods=("GET", "POST"))
 def display_teams():
     db = get_db()
-    teams = db.execute("SELECT * FROM time").fetchall()
+    teams = db.execute("SELECT * FROM team").fetchall()
 
     return render_template("display_db/display_teams.html", teams=teams)
 

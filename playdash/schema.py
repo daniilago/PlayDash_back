@@ -1,6 +1,6 @@
-from pydantic import BaseModel, HttpUrl as Url, TypeAdapter
+from pydantic import BaseModel, HttpUrl, TypeAdapter, WrapValidator
 from datetime import date, datetime
-from typing import Self
+from typing import Annotated, Any, Self
 
 
 class BaseSchema(BaseModel):
@@ -11,8 +11,18 @@ class BaseSchema(BaseModel):
 
     @classmethod
     # dado uma lista de modelos, ele retorna um json
-    def models_to_json(cls, vals: list[Self]):
+    def models_to_json(cls, vals: list[Self] | Self):
+        if isinstance(vals, cls):
+            return vals.model_dump(mode="json")
+        assert isinstance(vals, list)
         return TypeAdapter(list[cls]).dump_python(vals, mode="json")
+
+
+def url_from_db(value: Any, handler):
+    return handler(f"http://localhost:5000/{value}")
+
+
+Url = Annotated[HttpUrl, WrapValidator(url_from_db)]
 
 
 class User(BaseSchema):
