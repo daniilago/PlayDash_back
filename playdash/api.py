@@ -1,4 +1,4 @@
-from flask import Request
+from flask import Request, request
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
 from flask_openapi3.blueprint import APIBlueprint
@@ -131,7 +131,18 @@ def get_one_coach(path: PathName):
 )
 def get_all_matches() -> list[Match]:
     db = get_db()
-    matches = db.execute("SELECT * FROM match").fetchall()
+    filter = request.args.get("date", None)
+    if filter is None:
+        matches = db.execute("SELECT * FROM match").fetchall()
+    # filtros:
+    # passado: antes de hoje
+    # hoje: jogos de hoje
+    # semana: jogos da semana
+    # futuro: jogos depois da semana
+    elif filter == "passado":
+        matches = db.execute("SELECT * FROM match where date_hour < date()").fetchall()
+    elif filter == "futuro":
+        matches = db.execute("SELECT * FROM match where date_hour > date()").fetchall()
     return Match.models_to_json([Match.from_db(val) for val in matches])
 
 
