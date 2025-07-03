@@ -16,7 +16,11 @@
         <input type="text" name="nationality" id="nationality" required>
 
         <label for="position">Posição</label>
-        <input type="text" name="position" id="position" required>
+        <select name="position" id="position" required>
+            {% for pos in positions %}
+                <option value="{{ pos }}">{{ pos }}</option>
+            {% endfor %}
+        </select>
 
         <label for="shirt_number">Número</label>
         <input type="shirt_number" name="shirt_number" id="shirt_number" required>

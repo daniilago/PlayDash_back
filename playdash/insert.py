@@ -142,8 +142,9 @@ def insert_players():
 
     teams = db.execute("SELECT name FROM team").fetchall()
     players = db.execute("SELECT * FROM player").fetchall()
+    positions = ["goleiro", "zagueiro", "lateral", "volante", "meia", "ponta", "atacante", "centroavante"]
 
-    return render_template("insert/insert_players.html", players=players, teams=teams)
+    return render_template("insert/insert_players.html", players=players, teams=teams, positions=positions)
 
 
 @bp.route("/coaches", methods=("GET", "POST"))

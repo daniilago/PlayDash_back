@@ -64,7 +64,7 @@ def fill_db_command():
     if not user_exists:
         db.execute(
             "INSERT INTO user (name, email, password, user_type) VALUES (?, ?, ?, ?)",
-            ("danilago", "daniellago341@gmail.com", generate_password_hash("123"), "A"),
+            ("admin", "admin@gmail.com", generate_password_hash("123"), "A"),
         )
 
     # Times
@@ -72,11 +72,11 @@ def fill_db_command():
     if not team_exists:
         db.execute(
             "INSERT INTO team (name, emblem) VALUES (?, ?)",
-            ("a", "a.jpg"),
+            ("Flamengo", "a.jpg"),
         )
         db.execute(
             "INSERT INTO team (name, emblem) VALUES (?, ?)",
-            ("b", "a.jpg"),
+            ("Cruzeiro", "a.jpg"),
         )
 
     # Jogador
@@ -90,13 +90,13 @@ def fill_db_command():
             ) VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             (
-                "a",
+                "Pedro",
                 "2025-07-08",
-                "piruano",
+                "Brasileiro",
                 "aa69.jpg",
-                "cow girl",
-                69,
-                "a",
+                "atacante",
+                23,
+                "Flamengo",
             ),
         )
 
@@ -110,7 +110,7 @@ def fill_db_command():
                 photo, team_name
             ) VALUES (?, ?, ?, ?, ?)
             """,
-            ("a", "2025-07-07", "piruano", "a.jpg", "a"),
+            ("Tite", "2025-07-07", "Brasileiro", "a.jpg", "Flamengo"),
         )
 
     # Partida
@@ -123,7 +123,7 @@ def fill_db_command():
                 home_team, visitor_team
             ) VALUES (?, ?, ?, ?)
             """,
-            ("2025-07-26 02:06", "da", "a", "b"),
+            ("2025-07-26 02:06", "Rio de Janeiro", "Flamengo", "Cruzeiro"),
         )
 
     # Evento
@@ -138,8 +138,8 @@ def fill_db_command():
                 10000,
                 1,
                 "2025-07-15 02:16",
-                69,
-                "a",
+                23,
+                "Flamengo",
                 "gol",
             ),
         )
