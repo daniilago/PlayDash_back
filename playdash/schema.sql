@@ -1,98 +1,98 @@
-CREATE TABLE usuario (
-    nome_usuario character varying(30) NOT NULL,
+CREATE TABLE user (
+    name character varying(30) NOT NULL,
     email text NOT NULL,
-    senha character varying(50) NOT NULL,
-    tipo_do_usuario character(1) NOT NULL DEFAULT 'U',
+    password character varying(50) NOT NULL,
+    user_type character(1) NOT NULL DEFAULT 'U',
 
-    CONSTRAINT usuario_pkey PRIMARY KEY (email)
+    CONSTRAINT user_pkey PRIMARY KEY (email)
 );
 
-CREATE TABLE "time" (
-    nome_time character varying(100) NOT NULL,
-    brasao text NOT NULL,
-    total_partidas integer NOT NULL DEFAULT 0,
-    total_pontos integer NOT NULL DEFAULT 0,
-    faltas integer NOT NULL DEFAULT 0,
-    cartoes_amarelos_time integer NOT NULL DEFAULT 0,
-    cartoes_vermelhos_time integer NOT NULL DEFAULT 0,
-    vitorias integer NOT NULL DEFAULT 0,
-    empates integer NOT NULL DEFAULT 0,
-    derrotas integer NOT NULL DEFAULT 0,
-    gols_pro integer NOT NULL DEFAULT 0,
-    gols_contra integer NOT NULL DEFAULT 0,
+CREATE TABLE team (
+    name character varying(100) NOT NULL,
+    emblem text NOT NULL,
+    match_total integer NOT NULL DEFAULT 0,
+    points_total integer NOT NULL DEFAULT 0,
+    fouls integer NOT NULL DEFAULT 0,
+    yellow_cards integer NOT NULL DEFAULT 0,
+    red_cards integer NOT NULL DEFAULT 0,
+    wins integer NOT NULL DEFAULT 0,
+    draws integer NOT NULL DEFAULT 0,
+    losses integer NOT NULL DEFAULT 0,
+    own_goals integer NOT NULL DEFAULT 0,
+    against_goals integer NOT NULL DEFAULT 0,
 
-    CONSTRAINT time_pkey PRIMARY KEY (nome_time)
+    CONSTRAINT team_pkey PRIMARY KEY (name)
 );
 
-CREATE TABLE jogador (
-    nome_jogador character varying(100) NOT NULL,
-    data_nascimento date NOT NULL,
-    nacionalidade character varying(20) NOT NULL,
-    foto text NOT NULL,
-    gols integer NOT NULL DEFAULT 0,
-    posicao character varying(30) NOT NULL,
-    numero integer NOT NULL,
-    faltas integer NOT NULL DEFAULT 0,
-    cartoes_amarelos integer NOT NULL DEFAULT 0,
-    cartoes_vermelhos integer NOT NULL DEFAULT 0,
-    nome_time character varying(100) NOT NULL,
+CREATE TABLE player (
+    name character varying(100) NOT NULL,
+    date_of_birth date NOT NULL,
+    nationality character varying(20) NOT NULL,
+    photo text NOT NULL,
+    goals integer NOT NULL DEFAULT 0,
+    position character varying(30) NOT NULL,
+    shirt_number integer NOT NULL,
+    fouls integer NOT NULL DEFAULT 0,
+    yellow_cards integer NOT NULL DEFAULT 0,
+    red_cards integer NOT NULL DEFAULT 0,
+    team_name character varying(100) NOT NULL,
 
-    CONSTRAINT jogador_pkey PRIMARY KEY (numero, nome_time),
-    CONSTRAINT jogador_nome_time_fkey FOREIGN KEY (nome_time) 
-        REFERENCES "time"(nome_time) 
+    CONSTRAINT player_pkey PRIMARY KEY (shirt_number, name),
+    CONSTRAINT player_team_name_fkey FOREIGN KEY (team_name) 
+        REFERENCES team(name) 
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
-CREATE TABLE tecnico (
-    nome_tecnico character varying(100) NOT NULL,
-    data_nascimento date NOT NULL,
-    nacionalidade character varying(20) NOT NULL,
-    foto text NOT NULL,
-    nome_time character varying(100) NOT NULL,
+CREATE TABLE coach (
+    name character varying(100) NOT NULL,
+    date_of_birth date NOT NULL,
+    nationality character varying(20) NOT NULL,
+    photo text NOT NULL,
+    team_name character varying(100) NOT NULL,
 
-    CONSTRAINT tecnico_pkey PRIMARY KEY (nome_time),
-    CONSTRAINT tecnico_nome_time_fkey FOREIGN KEY (nome_time) 
-        REFERENCES "time"(nome_time) 
+    CONSTRAINT coach_pkey PRIMARY KEY (name),
+    CONSTRAINT coach_team_name_fkey FOREIGN KEY (team_name) 
+        REFERENCES team(name) 
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
-CREATE TABLE partida (
-    id_partida integer NOT NULL,
-    data_horario timestamp NOT NULL,
-    local_partida character varying(100) NOT NULL,
-    time_casa_nome character varying(100) NOT NULL,
-    time_visitante_nome character varying(100) NOT NULL,
-    gols_casa integer NOT NULL DEFAULT 0,
-    gols_visitante integer NOT NULL DEFAULT 0,
+CREATE TABLE match (
+    id integer NOT NULL,
+    date_hour timestamp NOT NULL,
+    location character varying(100) NOT NULL,
+    home_team character varying(100) NOT NULL,
+    visitor_team character varying(100) NOT NULL,
+    home_goals integer NOT NULL DEFAULT 0,
+    visitor_goals integer NOT NULL DEFAULT 0,
 
-    CONSTRAINT partida_pkey PRIMARY KEY (id_partida),
-    CONSTRAINT partida_time_casa_nome_fkey FOREIGN KEY (time_casa_nome) 
-        REFERENCES "time"(nome_time)
+    CONSTRAINT match_pkey PRIMARY KEY (id),
+    CONSTRAINT match_home_team_name_fkey FOREIGN KEY (home_team) 
+        REFERENCES team(name)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT partida_time_visitante_nome_fkey FOREIGN KEY (time_visitante_nome) 
-        REFERENCES "time"(nome_time)
+    CONSTRAINT match_visitor_team_name_fkey FOREIGN KEY (visitor_team) 
+        REFERENCES team(name)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
-CREATE TABLE evento (
-    id_evento integer NOT NULL,
-    id_partida integer NOT NULL,
-    data_horario date NOT NULL,
-    jogador_numero integer NOT NULL,
-    jogador_time character varying(100) NOT NULL,
-    tipo_do_evento character varying(20) NOT NULL,
+CREATE TABLE event (
+    id integer NOT NULL,
+    match_id integer NOT NULL,
+    date_hour date NOT NULL,
+    player_number integer NOT NULL,
+    player_team character varying(100) NOT NULL,
+    event_type character varying(20) NOT NULL,
 
-    CONSTRAINT evento_pkey PRIMARY KEY (id_evento, id_partida),
-    CONSTRAINT evento_id_partida_fkey FOREIGN KEY (id_partida) 
-        REFERENCES partida(id_partida)
+    CONSTRAINT event_pkey PRIMARY KEY (id, id),
+    CONSTRAINT event_match_id_fkey FOREIGN KEY (match_id) 
+        REFERENCES match(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT evento_jogador_numero_jogador_time_fkey FOREIGN KEY (jogador_numero, jogador_time)
-        REFERENCES jogador(numero, nome_time)
+    CONSTRAINT event_player_number_player_team_fkey FOREIGN KEY (player_number, player_team)
+        REFERENCES player(shirt_number, team_name)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );

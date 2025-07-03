@@ -19,10 +19,10 @@
     <ul>
       {% for coach in coaches %}
         <li>
-          <strong>{{ coach['nome_tecnico'] }} - Team: {{ coach['nome_time'] }}</strong>
+          <strong>{{ coach['name'] }} - Team: {{ coach['name'] }}</strong>
           <form method="post" style="display:inline;">
-            <input type="hidden" name="coach_name" value="{{ coach['nome_tecnico'] }}">
-            <button type="submit" onclick="return confirm('Delete coach {{ coach['nome_tecnico'] }}?')">Delete</button>
+            <input type="hidden" name="coach_name" value="{{ coach['name'] }}">
+            <button type="submit" onclick="return confirm('Delete coach {{ coach['name'] }}?')">Delete</button>
           </form>
         </li>
       {% endfor %}

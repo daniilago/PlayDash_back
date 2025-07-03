@@ -42,12 +42,12 @@ def drop_db_command():
     db = get_db()
     # Adapte os nomes das tabelas conforme seu schema.sql
     db.executescript("""
-        DROP TABLE IF EXISTS evento;
-        DROP TABLE IF EXISTS partida;
-        DROP TABLE IF EXISTS tecnico;
-        DROP TABLE IF EXISTS jogador;
-        DROP TABLE IF EXISTS "time";
-        DROP TABLE IF EXISTS usuario;
+        DROP TABLE IF EXISTS event;
+        DROP TABLE IF EXISTS match;
+        DROP TABLE IF EXISTS coach;
+        DROP TABLE IF EXISTS player;
+        DROP TABLE IF EXISTS team;
+        DROP TABLE IF EXISTS user;
     """)
     db.commit()
     click.echo("Dropped all tables.")

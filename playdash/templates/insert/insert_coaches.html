@@ -18,7 +18,7 @@
         <label for="team_name">Time</label>
         <select name="team_name" id="team_name" required>
             {% for team in teams %}
-                <option value="{{ team['nome_time'] }}">{{ team['nome_time'] }}</option>
+                <option value="{{ team['name'] }}">{{ team['name'] }}</option>
             {% endfor %}
         </select>
 

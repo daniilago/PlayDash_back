@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>Deletar partida</h1>
+  <h1>Deletar match</h1>
 {% endblock %}
 
 {% block content %}
@@ -19,10 +19,10 @@
     <ul>
       {% for match in matches %}
         <li>
-          <strong>{{ match['id_partida'] }}</strong>
+          <strong>{{ match['id'] }}</strong>
           <form method="post" style="display:inline;">
-            <input type="hidden" name="match_id" value="{{ match['id_partida'] }}">
-            <button type="submit" onclick="return confirm('Are you sure you want to delete {{ match['id_partida'] }}?')">
+            <input type="hidden" name="match_id" value="{{ match['id'] }}">
+            <button type="submit" onclick="return confirm('Are you sure you want to delete {{ match['id'] }}?')">
               Delete
             </button>
           </form>

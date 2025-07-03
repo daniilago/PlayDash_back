@@ -22,7 +22,7 @@ def display_db():
 @bp.route("/users", methods=("GET", "POST"))
 def display_users():
     db = get_db()
-    users = db.execute("SELECT * FROM usuario").fetchall()
+    users = db.execute("SELECT * FROM user").fetchall()
 
     return render_template("display_db/display_users.html", users=users)
 
@@ -38,7 +38,7 @@ def display_teams():
 @bp.route("/players", methods=("GET", "POST"))
 def display_players():
     db = get_db()
-    players = db.execute("SELECT * FROM jogador").fetchall()
+    players = db.execute("SELECT * FROM player").fetchall()
 
     return render_template("display_db/display_players.html", players=players)
 
@@ -46,7 +46,7 @@ def display_players():
 @bp.route("/coaches", methods=("GET", "POST"))
 def display_coaches():
     db = get_db()
-    coaches = db.execute("SELECT * FROM tecnico").fetchall()
+    coaches = db.execute("SELECT * FROM coach").fetchall()
 
     return render_template("display_db/display_coaches.html", coaches=coaches)
 
@@ -54,7 +54,7 @@ def display_coaches():
 @bp.route("/matches", methods=("GET", "POST"))
 def display_matches():
     db = get_db()
-    matches = db.execute("SELECT * FROM partida").fetchall()
+    matches = db.execute("SELECT * FROM match").fetchall()
 
     return render_template("display_db/display_matches.html", matches=matches)
 
@@ -62,6 +62,6 @@ def display_matches():
 @bp.route("/events", methods=("GET", "POST"))
 def display_events():
     db = get_db()
-    events = db.execute("SELECT * FROM evento").fetchall()
+    events = db.execute("SELECT * FROM event").fetchall()
 
     return render_template("display_db/display_events.html", events=events)

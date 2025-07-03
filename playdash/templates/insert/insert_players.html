@@ -18,13 +18,13 @@
         <label for="position">Posição</label>
         <input type="text" name="position" id="position" required>
 
-        <label for="number">Número</label>
-        <input type="number" name="number" id="number" required>
+        <label for="shirt_number">Número</label>
+        <input type="shirt_number" name="shirt_number" id="shirt_number" required>
 
         <label for="team_name">Time</label>
         <select name="team_name" id="team_name" required>
             {% for team in teams %}
-                <option value="{{ team['nome_time'] }}">{{ team['nome_time'] }}</option>
+                <option value="{{ team['name'] }}">{{ team['name'] }}</option>
             {% endfor %}
         </select>
 

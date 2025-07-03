@@ -7,16 +7,16 @@
 {% block content %}
     {% if matches %}
         {% for match in matches %}
-            <li>{{  match['id_partida'], 
-                    match['data_horario'].strftime('%d/%m/%Y %H:%M'), 
-                    match['local_partida'], 
-                    match['time_casa_nome'],
-                    match['time_visitante_nome'],
-                    match['gols_casa'],
-                    match['gols_visitante']
+            <li>{{  match['id'], 
+                    match['date_hour'].strftime('%d/%m/%Y %H:%M'), 
+                    match['location'], 
+                    match['home_team'],
+                    match['visitor_team'],
+                    match['home_goals'],
+                    match['visitor_goals']
             }}</li>
         {% endfor %}
     {% else %}
-        <p>Nenhuma partida cadastrada</p>
+        <p>Nenhuma match cadastrada</p>
     {% endif %}
 {% endblock %}

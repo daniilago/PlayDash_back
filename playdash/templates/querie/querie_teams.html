@@ -16,17 +16,17 @@
     <ul>
       {% for team in teams %}
         <li>
-          <strong>{{ team['nome_time'] }}</strong><br>
-          Total Partidas: {{ team['total_partidas'] }} |
-          Pontos: {{ team['total_pontos'] }} |
-          Faltas: {{ team['faltas'] }}<br>
-          Cartões Amarelos: {{ team['cartoes_amarelos_time'] }} |
-          Cartões Vermelhos: {{ team['cartoes_vermelhos_time'] }}<br>
-          Vitórias: {{ team['vitorias'] }} |
-          Empates: {{ team['empates'] }} |
-          Derrotas: {{ team['derrotas'] }}<br>
-          Gols Pró: {{ team['gols_pro'] }} |
-          Gols Contra: {{ team['gols_contra'] }}
+          <strong>{{ team['name'] }}</strong><br>
+          Total Partidas: {{ team['match_total'] }} |
+          Pontos: {{ team['points_total'] }} |
+          Faltas: {{ team['fouls'] }}<br>
+          Cartões Amarelos: {{ team['yellow_cards'] }} |
+          Cartões Vermelhos: {{ team['red_cards'] }}<br>
+          Vitórias: {{ team['wins'] }} |
+          Empates: {{ team['draws'] }} |
+          Derrotas: {{ team['losses'] }}<br>
+          Gols Pró: {{ team['own_goals'] }} |
+          Gols Contra: {{ team['against_goals'] }}
         </li>
       {% endfor %}
     </ul>

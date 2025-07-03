@@ -7,14 +7,14 @@
 {% block content %}
     {% if coaches %}
         {% for coach in coaches %}
-            <li>{{  coach['nome_tecnico'], 
-                    coach['data_nascimento'], 
-                    coach['nacionalidade'], 
-                    coach['foto'],
-                    coach['nome_time']
+            <li>{{  coach['name'], 
+                    coach['date_of_birth'], 
+                    coach['nationality'], 
+                    coach['photo'],
+                    coach['name']
             }}</li>
         {% endfor %}
     {% else %}
-        <p>Nenhum tecnico cadastrado</p>
+        <p>Nenhum coach cadastrado</p>
     {% endif %}
 {% endblock %}

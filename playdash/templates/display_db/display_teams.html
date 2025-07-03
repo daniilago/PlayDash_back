@@ -7,18 +7,18 @@
 {% block content %}
     {% if teams %}
         {% for team in teams %}
-            <li>{{  team['nome_time'], 
-                    team['brasao'], 
-                    team['total_partidas'], 
-                    team['total_pontos'],
-                    team['faltas'],
-                    team['cartoes_amarelos_time'],
-                    team['cartoes_vermelhos_time'],
-                    team['vitorias'],
-                    team['empates'],
-                    team['derrotas'],
-                    team['gols_pro'],
-                    team['gols_contra']
+            <li>{{  team['name'], 
+                    team['emblem'], 
+                    team['match_total'], 
+                    team['points_total'],
+                    team['fouls'],
+                    team['yellow_cards'],
+                    team['red_cards'],
+                    team['wins'],
+                    team['draws'],
+                    team['losses'],
+                    team['own_goals'],
+                    team['against_goals']
             }}</li>
         {% endfor %}
     {% else %}

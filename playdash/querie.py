@@ -22,10 +22,10 @@ def querie_teams():
     if request.method == "POST":
         team_name = request.form["team_name"]
         teams = db.execute(
-            'SELECT * FROM "time" WHERE nome_time LIKE ?', (f"%{team_name}%",)
+            'SELECT * FROM team WHERE name LIKE ?', (f"%{team_name}%",)
         ).fetchall()
     else:
-        teams = db.execute('SELECT * FROM "time"').fetchall()
+        teams = db.execute('SELECT * FROM team').fetchall()
     return render_template("querie/querie_teams.html", teams=teams)
 
 
@@ -33,25 +33,25 @@ def querie_teams():
 def querie_players():
     db = get_db()
     if request.method == "POST":
-        number = request.form["number"]
+        shirt_number = request.form["shirt_number"]
         team_name = request.form["team_name"]
         player_name = request.form["player_name"]
 
-        query = "SELECT * FROM jogador WHERE 1=1"
+        query = "SELECT * FROM player WHERE 1=1"
         params = []
-        if number:
-            query += " AND numero = ?"
-            params.append(number)
+        if shirt_number:
+            query += " AND shirt_number = ?"
+            params.append(shirt_number)
         if team_name:
-            query += " AND nome_time LIKE ?"
+            query += " AND team_name LIKE ?"
             params.append(f"%{team_name}%")
         if player_name:
-            query += " AND nome_jogador LIKE ?"
+            query += " AND name LIKE ?"
             params.append(f"%{player_name}%")
 
         players = db.execute(query, tuple(params)).fetchall()
     else:
-        players = db.execute("SELECT * FROM jogador").fetchall()
+        players = db.execute("SELECT * FROM player").fetchall()
     return render_template("querie/querie_players.html", players=players)
 
 
@@ -62,18 +62,18 @@ def querie_coaches():
         team_name = request.form["team_name"]
         coach_name = request.form["coach_name"]
 
-        query = "SELECT * FROM tecnico WHERE 1=1"
+        query = "SELECT * FROM coach WHERE 1=1"
         params = []
         if team_name:
-            query += " AND nome_time LIKE ?"
+            query += " AND team_name LIKE ?"
             params.append(f"%{team_name}%")
         if coach_name:
-            query += " AND nome_tecnico LIKE ?"
+            query += " AND name LIKE ?"
             params.append(f"%{coach_name}%")
 
         coaches = db.execute(query, tuple(params)).fetchall()
     else:
-        coaches = db.execute("SELECT * FROM tecnico").fetchall()
+        coaches = db.execute("SELECT * FROM coach").fetchall()
     return render_template("querie/querie_coaches.html", coaches=coaches)
 
 
@@ -85,23 +85,23 @@ def querie_matches():
         team1 = request.form.get("team1")
         team2 = request.form.get("team2")
 
-        query = "SELECT * FROM partida WHERE 1=1"
+        query = "SELECT * FROM match WHERE 1=1"
         params = []
 
         if location:
-            query += " AND local_partida LIKE ?"
+            query += " AND location LIKE ?"
             params.append(f"%{location}%")
 
         if team1 and team2:
-            query += " AND ((time_casa_nome LIKE ? AND time_visitante_nome LIKE ?) OR (time_casa_nome LIKE ? AND time_visitante_nome LIKE ?))"
+            query += " AND ((home_team LIKE ? AND visitor_team LIKE ?) OR (home_team LIKE ? AND visitor_team LIKE ?))"
             params.extend([f"%{team1}%", f"%{team2}%", f"%{team2}%", f"%{team1}%"])
         elif team1:
-            query += " AND (time_casa_nome LIKE ? OR time_visitante_nome LIKE ?)"
+            query += " AND (home_team LIKE ? OR visitor_team LIKE ?)"
             params.extend([f"%{team1}%", f"%{team1}%"])
 
         matches = db.execute(query, tuple(params)).fetchall()
     else:
-        matches = db.execute("SELECT * FROM partida").fetchall()
+        matches = db.execute("SELECT * FROM match").fetchall()
     return render_template("querie/querie_matches.html", matches=matches)
 
 
@@ -109,10 +109,10 @@ def querie_matches():
 def querie_events():
     db = get_db()
     query = """
-        SELECT e.id_evento, e.id_partida, e.tipo_do_evento, e.data_horario,
-               e.jogador_time, j.nome_jogador
-        FROM evento e
-        JOIN jogador j ON e.jogador_numero = j.numero AND e.jogador_time = j.nome_time
+        SELECT e.id, e.match_id, e.event_type, e.date_hour,
+               e.player_team, j.name
+        FROM event e
+        JOIN player j ON e.player_number = j.shirt_number AND e.player_team = j.name
         WHERE 1=1
     """
     params = []
@@ -123,13 +123,13 @@ def querie_events():
         match_id = request.form.get("match_id")
 
         if event_type:
-            query += " AND e.tipo_do_evento LIKE ?"
+            query += " AND e.event_type LIKE ?"
             params.append(f"%{event_type}%")
         if player_name:
-            query += " AND j.nome_jogador LIKE ?"
+            query += " AND j.name LIKE ?"
             params.append(f"%{player_name}%")
         if match_id:
-            query += " AND e.id_partida = ?"
+            query += " AND e.match_id = ?"
             params.append(match_id)
 
     events = db.execute(query, params).fetchall()

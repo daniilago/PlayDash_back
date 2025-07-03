@@ -21,12 +21,12 @@ def delete_teams():
     db = get_db()
     if request.method == "POST":
         team_name = request.form["team_name"]
-        db.execute('DELETE FROM "time" WHERE nome_time = ?', (team_name,))
+        db.execute('DELETE FROM team WHERE name = ?', (team_name,))
         db.commit()
         flash(f"Time {team_name} deletado.")
         return redirect(url_for("delete.delete_teams"))
 
-    teams = db.execute('SELECT * FROM "time"').fetchall()
+    teams = db.execute('SELECT * FROM team').fetchall()
     return render_template("delete/delete_teams.html", teams=teams)
 
 
@@ -34,17 +34,17 @@ def delete_teams():
 def delete_players():
     db = get_db()
     if request.method == "POST":
-        number = request.form["number"]
+        shirt_number = request.form["shirt_number"]
         team_name = request.form["team_name"]
         db.execute(
-            "DELETE FROM jogador WHERE numero = ? AND nome_time = ?",
-            (number, team_name),
+            "DELETE FROM player WHERE shirt_number = ? AND team_name = ?",
+            (shirt_number, team_name),
         )
         db.commit()
         flash("Jogador deletado.")
         return redirect(url_for("delete.delete_players"))
 
-    players = db.execute("SELECT * FROM jogador").fetchall()
+    players = db.execute("SELECT * FROM player").fetchall()
     return render_template("delete/delete_players.html", players=players)
 
 
@@ -53,12 +53,12 @@ def delete_coaches():
     db = get_db()
     if request.method == "POST":
         coach_name = request.form["coach_name"]
-        db.execute("DELETE FROM tecnico WHERE nome_tecnico = ?", (coach_name,))
+        db.execute("DELETE FROM coach WHERE name = ?", (coach_name,))
         db.commit()
         flash("Técnico deletado.")
         return redirect(url_for("delete.delete_coaches"))
 
-    coaches = db.execute("SELECT * FROM tecnico").fetchall()
+    coaches = db.execute("SELECT * FROM coach").fetchall()
     return render_template("delete/delete_coaches.html", coaches=coaches)
 
 
@@ -67,12 +67,12 @@ def delete_matches():
     db = get_db()
     if request.method == "POST":
         match_id = request.form["match_id"]
-        db.execute("DELETE FROM partida WHERE id_partida = ?", (match_id,))
+        db.execute("DELETE FROM match WHERE id = ?", (match_id,))
         db.commit()
         flash("Partida deletada.")
         return redirect(url_for("delete.delete_matches"))
 
-    matches = db.execute("SELECT * FROM partida").fetchall()
+    matches = db.execute("SELECT * FROM match").fetchall()
     return render_template("delete/delete_matches.html", matches=matches)
 
 
@@ -81,10 +81,10 @@ def delete_events():
     db = get_db()
     if request.method == "POST":
         event_id = request.form["event_id"]
-        db.execute("DELETE FROM evento WHERE id_evento = ?", (event_id,))
+        db.execute("DELETE FROM event WHERE id = ?", (event_id,))
         db.commit()
         flash("Evento deletado.")
         return redirect(url_for("delete.delete_events"))
 
-    events = db.execute("SELECT * FROM evento").fetchall()
+    events = db.execute("SELECT * FROM event").fetchall()
     return render_template("delete/delete_events.html", events=events)

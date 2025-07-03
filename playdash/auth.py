@@ -27,7 +27,7 @@ def load_logged_in_user():
     else:
         g.user = (
             get_db()
-            .execute("SELECT * FROM usuario WHERE nome_usuario = ?", (user_name,))
+            .execute("SELECT * FROM user WHERE name = ?", (user_name,))
             .fetchone()
         )
 
@@ -51,7 +51,7 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO usuario (nome_usuario, email, senha, tipo_do_usuario) VALUES (?, ?, ?, ?)",
+                    "INSERT INTO user (name, email, password, user_type) VALUES (?, ?, ?, ?)",
                     (username, email, generate_password_hash(password), "f"),
                 )
                 db.commit()
@@ -73,16 +73,16 @@ def login():
         db = get_db()
         error = None
 
-        user = db.execute("SELECT * FROM usuario WHERE email = ?", (email,)).fetchone()
+        user = db.execute("SELECT * FROM user WHERE email = ?", (email,)).fetchone()
 
         if user is None:
             error = "Incorrect email."
-        elif not check_password_hash(user["senha"], password):
+        elif not check_password_hash(user["password"], password):
             error = "Incorrect password"
 
         if error is None:
             session.clear()
-            session["user_name"] = user["nome_usuario"]
+            session["user_name"] = user["name"]
             return redirect(url_for("home.home"))
 
         flash(error)

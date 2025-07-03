@@ -44,7 +44,7 @@ class Player(BaseSchema):
     photo: Url
     goals: int
     position: str
-    number: int
+    shirt_number: int
     fouls: int
     yellow_cards: int
     red_cards: int

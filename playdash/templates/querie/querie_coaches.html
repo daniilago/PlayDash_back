@@ -20,10 +20,10 @@
     <ul>
       {% for coach in coaches %}
         <li>
-          <strong>{{ coach['nome_tecnico'] }}</strong><br>
-          Time: {{ coach['nome_time'] }}<br>
-          Nascimento: {{ coach['data_nascimento'].strftime('%d/%m/%Y') }}<br>
-          Nacionalidade: {{ coach['nacionalidade'] }}
+          <strong>{{ coach['name'] }}</strong><br>
+          Time: {{ coach['name'] }}<br>
+          Nascimento: {{ coach['date_of_birth'].strftime('%d/%m/%Y') }}<br>
+          Nacionalidade: {{ coach['nationality'] }}
         </li>
       {% endfor %}
     </ul>

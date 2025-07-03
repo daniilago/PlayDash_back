@@ -10,10 +10,10 @@
     <input type="text" name="event_type" id="event_type" placeholder="Ex: Gol, Falta, Cartão...">
     
     <label for="player_name">Nome do Jogador:</label>
-    <input type="text" name="player_name" id="player_name" placeholder="Digite o nome do jogador...">
+    <input type="text" name="player_name" id="player_name" placeholder="Digite o nome do player...">
     
     <label for="match_id">ID da Partida:</label>
-    <input type="number" name="match_id" id="match_id" placeholder="Digite o ID da partida...">
+    <input type="shirt_number" name="match_id" id="match_id" placeholder="Digite o ID da match...">
     
     <button type="submit">Buscar</button>
   </form>
@@ -23,16 +23,16 @@
     <ul>
       {% for event in events %}
         <li>
-          <strong>Evento ID:</strong> {{ event['id_evento'] }}<br>
-          <strong>Partida ID:</strong> {{ event['id_partida'] }}<br>
-          <strong>Tipo do Evento:</strong> {{ event['tipo_do_evento'] }}<br>
-          <strong>Jogador:</strong> {{ event['nome_jogador'] }}<br>
-          <strong>Time:</strong> {{ event['jogador_time'] }}<br>
-          <strong>Data e Horário:</strong> {{ event['data_horario'] }}
+          <strong>Evento ID:</strong> {{ event['id'] }}<br>
+          <strong>Partida ID:</strong> {{ event['id'] }}<br>
+          <strong>Tipo do Evento:</strong> {{ event['event_type'] }}<br>
+          <strong>Jogador:</strong> {{ event['name'] }}<br>
+          <strong>Time:</strong> {{ event['player_team'] }}<br>
+          <strong>Data e Horário:</strong> {{ event['date_hour'] }}
         </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>Nenhum evento encontrado.</p>
+    <p>Nenhum event encontrado.</p>
   {% endif %}
 {% endblock %}

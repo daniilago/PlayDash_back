@@ -9,8 +9,8 @@
     <label for="player_name">Nome do Jogador:</label>
     <input type="text" name="player_name" id="player_name" placeholder="Ex: Neymar">
 
-    <label for="number">Número:</label>
-    <input type="number" name="number" id="number" placeholder="Ex: 10">
+    <label for="shirt_number">Número:</label>
+    <input type="shirt_number" name="shirt_number" id="shirt_number" placeholder="Ex: 10">
 
     <label for="team_name">Time:</label>
     <input type="text" name="team_name" id="team_name" placeholder="Ex: Brasil FC">
@@ -23,17 +23,17 @@
     <ul>
       {% for player in players %}
         <li>
-          <strong>{{ player['nome_jogador'] }}</strong><br>
-          Nº {{ player['numero'] }} | {{ player['posicao'] }}<br>
-          Time: {{ player['nome_time'] }}<br>
-          Nascimento: {{ player['data_nascimento'].strftime('%d/%m/%Y') }}<br>
-          Nacionalidade: {{ player['nacionalidade'] }}<br>
-          Gols: {{ player['gols'] }} | Faltas: {{ player['faltas'] }}<br>
-          Amarelos: {{ player['cartoes_amarelos'] }} | Vermelhos: {{ player['cartoes_vermelhos'] }}
+          <strong>{{ player['name'] }}</strong><br>
+          Nº {{ player['shirt_number'] }} | {{ player['position'] }}<br>
+          Time: {{ player['name'] }}<br>
+          Nascimento: {{ player['date_of_birth'].strftime('%d/%m/%Y') }}<br>
+          Nacionalidade: {{ player['nationality'] }}<br>
+          Gols: {{ player['goals'] }} | Faltas: {{ player['fouls'] }}<br>
+          Amarelos: {{ player['yellow_cards'] }} | Vermelhos: {{ player['red_cards'] }}
         </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>Nenhum jogador encontrado.</p>
+    <p>Nenhum player encontrado.</p>
   {% endif %}
 {% endblock %}

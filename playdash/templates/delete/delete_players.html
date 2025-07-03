@@ -19,11 +19,11 @@
     <ul>
       {% for player in players %}
         <li>
-          <strong>{{ player['nome_jogador'] }} (Number: {{ player['numero'] }}) - Team: {{ player['nome_time'] }}</strong>
+          <strong>{{ player['name'] }} (Number: {{ player['shirt_number'] }}) - Team: {{ player['name'] }}</strong>
           <form method="post" style="display:inline;">
-            <input type="hidden" name="number" value="{{ player['numero'] }}">
-            <input type="hidden" name="team_name" value="{{ player['nome_time'] }}">
-            <button type="submit" onclick="return confirm('Delete player {{ player['nome_jogador'] }}?')">Delete</button>
+            <input type="hidden" name="shirt_number" value="{{ player['shirt_number'] }}">
+            <input type="hidden" name="team_name" value="{{ player['name'] }}">
+            <button type="submit" onclick="return confirm('Delete player {{ player['name'] }}?')">Delete</button>
           </form>
         </li>
       {% endfor %}

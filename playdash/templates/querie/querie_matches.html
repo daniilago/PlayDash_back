@@ -23,14 +23,14 @@
     <ul>
       {% for match in matches %}
         <li>
-          <strong>ID {{ match['id_partida'] }}</strong><br>
-          {{ match['time_casa_nome'] }} ({{ match['gols_casa'] }}) x ({{ match['gols_visitante'] }}) {{ match['time_visitante_nome'] }}<br>
-          Local: {{ match['local_partida'] }}<br>
-          Data e Hora: {{ match['data_horario'].strftime('%d/%m/%Y %H:%M') }}
+          <strong>ID {{ match['id'] }}</strong><br>
+          {{ match['home_team'] }} ({{ match['home_goals'] }}) x ({{ match['visitor_goals'] }}) {{ match['visitor_team'] }}<br>
+          Local: {{ match['location'] }}<br>
+          Data e Hora: {{ match['date_hour'].strftime('%d/%m/%Y %H:%M') }}
         </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>Nenhuma partida encontrada.</p>
+    <p>Nenhuma match encontrada.</p>
   {% endif %}
 {% endblock %}

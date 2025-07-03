@@ -49,7 +49,7 @@ def insert_teams():
             team_name = secure_filename(team_name)
             team_name.replace("_", " ")
             existing_team = db.execute(
-                'SELECT 1 FROM "time" WHERE nome_time = ?', (team_name,)
+                'SELECT 1 FROM team WHERE name = ?', (team_name,)
             ).fetchone()
             if existing_team:
                 error = f"Time '{team_name}' já existe"
@@ -63,7 +63,7 @@ def insert_teams():
                     )
                 )
                 db.execute(
-                    'INSERT INTO "time" (nome_time, brasao) VALUES (?, ?)',
+                    'INSERT INTO team (name, emblem) VALUES (?, ?)',
                     (team_name, filename),
                 )
                 db.commit()
@@ -82,7 +82,7 @@ def insert_players():
         birth_date = request.form["birth_date"]
         nationality = request.form["nationality"]
         position = request.form["position"]
-        number = request.form["number"]
+        shirt_number = request.form["shirt_number"]
         team_name = request.form["team_name"]
         photo = request.files["photo"]
 
@@ -93,7 +93,7 @@ def insert_players():
             or not birth_date
             or not nationality
             or not position
-            or not number
+            or not shirt_number
             or not team_name
         ):
             error = "Todos os campos são obrigatórios."
@@ -108,16 +108,16 @@ def insert_players():
             filename = (
                 team_name.replace(" ", "_")
                 + "_"
-                + secure_filename(number)
+                + secure_filename(shirt_number)
                 + os.path.splitext(photo.filename)[1]
             )
 
             try:
                 db.execute(
                     """
-                    INSERT INTO jogador (
-                        nome_jogador, data_nascimento, nacionalidade,
-                        foto, posicao, numero, nome_time
+                    INSERT INTO player (
+                        name, date_of_birth, nationality,
+                        photo, position, shirt_number, team_name
                     ) VALUES (?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
@@ -126,7 +126,7 @@ def insert_players():
                         nationality,
                         filename,
                         position,
-                        number,
+                        shirt_number,
                         team_name,
                     ),
                 )
@@ -140,12 +140,12 @@ def insert_players():
                 )
                 return redirect(url_for("insert.insert_players"))
             except db.IntegrityError:
-                error = f"Jogador com número {number} já existe no time {team_name}."
+                error = f"Jogador com número {shirt_number} já existe no time {team_name}."
 
         flash(error)
 
-    teams = db.execute('SELECT nome_time FROM "time"').fetchall()
-    players = db.execute("SELECT * FROM jogador").fetchall()
+    teams = db.execute('SELECT name FROM team').fetchall()
+    players = db.execute("SELECT * FROM player").fetchall()
 
     return render_template("insert/insert_players.html", players=players, teams=teams)
 
@@ -187,9 +187,9 @@ def insert_coaches():
             try:
                 db.execute(
                     """
-                    INSERT INTO tecnico (
-                        nome_tecnico, data_nascimento, nacionalidade,
-                        foto, nome_time
+                    INSERT INTO coach (
+                        name, date_of_birth, nationality,
+                        photo, team_name
                     ) VALUES (?, ?, ?, ?, ?)
                     """,
                     (coach_name, birth_date, nationality, filename, team_name),
@@ -207,8 +207,8 @@ def insert_coaches():
                 error = f"Já existe um técnico no time {team_name}."
 
         flash(error)
-    teams = db.execute('SELECT nome_time FROM "time"').fetchall()
-    coaches = db.execute("SELECT * FROM tecnico").fetchall()
+    teams = db.execute('SELECT name FROM team').fetchall()
+    coaches = db.execute("SELECT * FROM coach").fetchall()
 
     return render_template("insert/insert_coaches.html", coaches=coaches, teams=teams)
 
@@ -233,9 +233,9 @@ def insert_matches():
             try:
                 db.execute(
                     """
-                    INSERT INTO partida (
-                        data_horario, local_partida,
-                        time_casa_nome, time_visitante_nome
+                    INSERT INTO match (
+                        date_hour, location,
+                        home_team, visitor_team
                     ) VALUES (?, ?, ?, ?)
                     """,
                     (match_datetime, match_location, home_team, away_team),
@@ -247,8 +247,8 @@ def insert_matches():
 
         flash(error)
 
-    teams = db.execute('SELECT nome_time FROM "time"').fetchall()
-    matches = db.execute("SELECT * FROM partida").fetchall()
+    teams = db.execute('SELECT name FROM team').fetchall()
+    matches = db.execute("SELECT * FROM match").fetchall()
 
     return render_template("insert/insert_matches.html", matches=matches, teams=teams)
 
@@ -270,14 +270,14 @@ def insert_events():
         elif not date_hour:
             error = "Date and time are required."
         elif not player_number:
-            error = "Player number is required."
+            error = "Player shirt_number is required."
         elif not player_team:
             error = "Player team is required."
         elif not event_type:
             error = "Event type is required."
 
         if error is None:
-            # Mapear tipos de evento para prefixos
+            # Mapear tipos de event para prefixos
             event_prefix_map = {
                 "gol": 1,
                 "falta": 2,
@@ -285,32 +285,32 @@ def insert_events():
                 "cartao_vermelho": 4,
             }
 
-            # Obter o prefixo do tipo de evento
+            # Obter o prefixo do tipo de event
             event_prefix = event_prefix_map.get(event_type)
             if event_prefix is None:
                 error = "Invalid event type."
             else:
-                # Calcular o próximo ID do evento
-                prefix = f"{event_prefix}0000"  # Exemplo: 10000 para gols
+                # Calcular o próximo ID do event
+                prefix = f"{event_prefix}0000"  # Exemplo: 10000 para goals
                 last_event = db.execute(
                     """
-                    SELECT id_evento FROM evento
-                    WHERE id_evento >= ? AND id_evento < ?
-                    ORDER BY id_evento DESC LIMIT 1
+                    SELECT id FROM event
+                    WHERE id >= ? AND id < ?
+                    ORDER BY id DESC LIMIT 1
                     """,
                     (int(prefix), int(prefix) + 10000),
                 ).fetchone()
 
                 if last_event:
-                    next_id = last_event["id_evento"] + 1
+                    next_id = last_event["id"] + 1
                 else:
-                    next_id = int(prefix)  # Primeiro ID para este tipo de evento
+                    next_id = int(prefix)  # Primeiro ID para este tipo de event
 
             try:
-                # Inserir o evento no banco de dados
+                # Inserir o event no banco de dados
                 db.execute(
                     """
-                    INSERT INTO evento (id_evento, id_partida, data_horario, jogador_numero, jogador_time, tipo_do_evento)
+                    INSERT INTO event (id, match_id, date_hour, player_number, player_team, event_type)
                     VALUES (?, ?, ?, ?, ?, ?)
                     """,
                     (
@@ -329,9 +329,9 @@ def insert_events():
 
         flash(error)
 
-    matches = db.execute("SELECT id_partida FROM partida").fetchall()
+    matches = db.execute("SELECT id FROM match").fetchall()
     players = db.execute(
-        "SELECT numero AS jogador_numero, nome_time FROM jogador"
+        "SELECT shirt_number AS player_number, name FROM player"
     ).fetchall()
     event_types = ["gol", "falta", "cartao_amarelo", "cartao_vermelho"]
 

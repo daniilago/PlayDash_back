@@ -6,7 +6,7 @@
     <ul>
         {% if g.user %}
             <li><a href="{{ url_for('home.home') }}">Home</a>
-            <li><span>{{ g.user['nome_usuario'] }}</span>
+            <li><span>{{ g.user['name'] }}</span>
             <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
         {% else %}
             {% if request.endpoint == 'auth.register' %}
