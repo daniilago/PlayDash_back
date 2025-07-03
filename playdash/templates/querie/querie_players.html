@@ -20,20 +20,39 @@
 
   {% if players %}
     <h2>Jogadores encontrados:</h2>
-    <ul>
-      {% for player in players %}
-        <li>
-          <strong>{{ player['name'] }}</strong><br>
-          Nº {{ player['shirt_number'] }} | {{ player['position'] }}<br>
-          Time: {{ player['team_name'] }}<br>
-          Nascimento: {{ player['date_of_birth'].strftime('%d/%m/%Y') }}<br>
-          Nacionalidade: {{ player['nationality'] }}<br>
-          Gols: {{ player['goals'] }} | Faltas: {{ player['fouls'] }}<br>
-          Amarelos: {{ player['yellow_cards'] }} | Vermelhos: {{ player['red_cards'] }}
-        </li>
-      {% endfor %}
-    </ul>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Número</th>
+          <th>Posição</th>
+          <th>Time</th>
+          <th>Data de Nascimento</th>
+          <th>Nacionalidade</th>
+          <th>Gols</th>
+          <th>Faltas</th>
+          <th>Cartões Amarelos</th>
+          <th>Cartões Vermelhos</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for player in players %}
+          <tr>
+            <td>{{ player['name'] }}</td>
+            <td>{{ player['shirt_number'] }}</td>
+            <td>{{ player['position'] }}</td>
+            <td>{{ player['team_name'] }}</td>
+            <td>{{ player['date_of_birth'].strftime('%d/%m/%Y') if player['date_of_birth'] else '' }}</td>
+            <td>{{ player['nationality'] }}</td>
+            <td>{{ player['goals'] }}</td>
+            <td>{{ player['fouls'] }}</td>
+            <td>{{ player['yellow_cards'] }}</td>
+            <td>{{ player['red_cards'] }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
-    <p>Nenhum player encontrado.</p>
+    <p>Nenhum jogador encontrado.</p>
   {% endif %}
 {% endblock %}

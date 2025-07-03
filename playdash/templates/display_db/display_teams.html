@@ -6,29 +6,42 @@
 
 {% block content %}
     {% if teams %}
-        <ul>
-        {% for team in teams %}
-            <li>
-                <strong>Nome:</strong> {{ team['name'] }} |
-                <strong>Emblema:</strong> {{ team['emblem'] }}
-                <br>
-                <strong>Total de Partidas:</strong> {{ team['match_total'] }} |
-                <strong>Vitórias:</strong> {{ team['wins'] }} |
-                <strong>Empates:</strong> {{ team['draws'] }} |
-                <strong>Derrotas:</strong> {{ team['losses'] }}
-                <br>
-                <strong>Pontos Totais:</strong> {{ team['points_total'] }}
-                <br>
-                <strong>Gols Próprios:</strong> {{ team['own_goals'] }} |
-                <strong>Gols Sofridos:</strong> {{ team['against_goals'] }}
-                <br>
-                <strong>Faltas:</strong> {{ team['fouls'] }} |
-                <strong>Cartões Amarelos:</strong> {{ team['yellow_cards'] }} |
-                <strong>Cartões Vermelhos:</strong> {{ team['red_cards'] }}
-            </li>
-            <hr>
-        {% endfor %}
-        <ul>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Emblema</th>
+                    <th>Partidas</th>
+                    <th>Vitórias</th>
+                    <th>Empates</th>
+                    <th>Derrotas</th>
+                    <th>Pontos</th>
+                    <th>Gols pró</th>
+                    <th>Gols Sofridos</th>
+                    <th>Faltas</th>
+                    <th>Cartões Amarelos</th>
+                    <th>Cartões Vermelhos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in teams %}
+                    <tr>
+                        <td>{{ team['name'] }}</td>
+                        <td>{{ team['emblem'] }}</td>
+                        <td>{{ team['match_total'] }}</td>
+                        <td>{{ team['wins'] }}</td>
+                        <td>{{ team['draws'] }}</td>
+                        <td>{{ team['losses'] }}</td>
+                        <td>{{ team['points_total'] }}</td>
+                        <td>{{ team['own_goals'] }}</td>
+                        <td>{{ team['against_goals'] }}</td>
+                        <td>{{ team['fouls'] }}</td>
+                        <td>{{ team['yellow_cards'] }}</td>
+                        <td>{{ team['red_cards'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <p>Nenhum time cadastrado</p>
     {% endif %}

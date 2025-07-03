@@ -6,21 +6,33 @@
 
 {% block content %}
     {% if matches %}
-        <ul>
-        {% for match in matches %}
-            <li>
-                <strong>ID:</strong> {{ match['id'] }}<br>
-                <strong>Data e Hora:</strong> {{ match['date_hour'].strftime('%d/%m/%Y %H:%M') if match['date_hour'] else '' }}<br>
-                <strong>Local:</strong> {{ match['location'] }}<br>
-                <strong>Time da Casa:</strong> {{ match['home_team'] }} |
-                <strong>Gols:</strong> {{ match['home_goals'] }}<br>
-                <strong>Time Visitante:</strong> {{ match['visitor_team'] }} |
-                <strong>Gols:</strong> {{ match['visitor_goals'] }}
-            </li>
-            <hr>
-        {% endfor %}
-        </ul>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data e Hora</th>
+                    <th>Local</th>
+                    <th>Time da Casa</th>
+                    <th>Gols da Casa</th>
+                    <th>Time Visitante</th>
+                    <th>Gols Visitante</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for match in matches %}
+                    <tr>
+                        <td>{{ match['id'] }}</td>
+                        <td>{{ match['date_hour'].strftime('%d/%m/%Y %H:%M') if match['date_hour'] else '' }}</td>
+                        <td>{{ match['location'] }}</td>
+                        <td>{{ match['home_team'] }}</td>
+                        <td>{{ match['home_goals'] }}</td>
+                        <td>{{ match['visitor_team'] }}</td>
+                        <td>{{ match['visitor_goals'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
-        <p>Nenhuma match cadastrada</p>
+        <p>Nenhuma partida cadastrada</p>
     {% endif %}
 {% endblock %}

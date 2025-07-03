@@ -6,29 +6,39 @@
 
 {% block content %}
     {% if players %}
-        <ul>
-        {% for player in players %}
-            <li>
-                <strong>Nome:</strong> {{ player['name'] }} |
-                <strong>Número:</strong> {{ player['shirt_number'] }} |
-                <strong>Posição:</strong> {{ player['position'] }}
-                <strong>Nome do time:</strong> {{ player['team_name'] }}
-                <br>
-                <strong>Data de Nascimento:</strong> {{ player['date_of_birth'] }} |
-                <strong>Nacionalidade:</strong> {{ player['nationality'] }}
-                <br>
-                <strong>Gols:</strong> {{ player['goals'] }} |
-                <strong>Faltas:</strong> {{ player['fouls'] }}
-                <br>
-                <strong>Cartões Amarelos:</strong> {{ player['yellow_cards'] }} |
-                <strong>Cartões Vermelhos:</strong> {{ player['red_cards'] }}
-                <br>
-                <strong>Foto:</strong> {{ player['photo'] }}
-            </li>
-            <hr>
-        {% endfor %}
-        </ul>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Número</th>
+                    <th>Posição</th>
+                    <th>Time</th>
+                    <th>Data de Nascimento</th>
+                    <th>Nacionalidade</th>
+                    <th>Gols</th>
+                    <th>Faltas</th>
+                    <th>Cartões Amarelos</th>
+                    <th>Cartões Vermelhos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in players %}
+                    <tr>
+                        <td>{{ player['name'] }}</td>
+                        <td>{{ player['shirt_number'] }}</td>
+                        <td>{{ player['position'] }}</td>
+                        <td>{{ player['team_name'] }}</td>
+                        <td>{{ player['date_of_birth'].strftime('%d/%m/%Y') if player['date_of_birth'] else '' }}</td>
+                        <td>{{ player['nationality'] }}</td>
+                        <td>{{ player['goals'] }}</td>
+                        <td>{{ player['fouls'] }}</td>
+                        <td>{{ player['yellow_cards'] }}</td>
+                        <td>{{ player['red_cards'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
-        <p>Nenhum player cadastrado</p>
+        <p>Nenhum jogador cadastrado</p>
     {% endif %}
 {% endblock %}

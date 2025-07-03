@@ -6,20 +6,31 @@
 
 {% block content %}
     {% if events %}
-        <ul>
-        {% for event in events %}
-            <li>
-                <strong>ID:</strong> {{ event['id'] }}<br>
-                <strong>ID da Partida:</strong> {{ event['match_id'] }}<br>
-                <strong>Data e Hora:</strong> {{ event['date_hour'].strftime('%d/%m/%Y %H:%M') if event['date_hour'] else '' }}<br>
-                <strong>Número do Jogador:</strong> {{ event['player_number'] }}<br>
-                <strong>Time do Jogador:</strong> {{ event['player_team'] }}<br>
-                <strong>Tipo de Evento:</strong> {{ event['event_type'] }}
-            </li>
-            <hr>
-        {% endfor %}
-        </ul>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID da Partida</th>
+                    <th>Data e Hora</th>
+                    <th>Número do Jogador</th>
+                    <th>Time do Jogador</th>
+                    <th>Tipo de Evento</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event['id'] }}</td>
+                        <td>{{ event['match_id'] }}</td>
+                        <td>{{ event['date_hour'].strftime('%d/%m/%Y %H:%M') if event['date_hour'] else '' }}</td>
+                        <td>{{ event['player_number'] }}</td>
+                        <td>{{ event['player_team'] }}</td>
+                        <td>{{ event['event_type'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
-        <p>Nenhum event cadastrado</p>
+        <p>Nenhum evento cadastrado</p>
     {% endif %}
 {% endblock %}

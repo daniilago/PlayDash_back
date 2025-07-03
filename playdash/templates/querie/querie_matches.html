@@ -20,17 +20,33 @@
 
   {% if matches %}
     <h2>Partidas Encontradas:</h2>
-    <ul>
-      {% for match in matches %}
-        <li>
-          <strong>ID {{ match['id'] }}</strong><br>
-          {{ match['home_team'] }} ({{ match['home_goals'] }}) x ({{ match['visitor_goals'] }}) {{ match['visitor_team'] }}<br>
-          Local: {{ match['location'] }}<br>
-          Data e Hora: {{ match['date_hour'].strftime('%d/%m/%Y %H:%M') }}
-        </li>
-      {% endfor %}
-    </ul>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Time da Casa</th>
+          <th>Gols da Casa</th>
+          <th>Time Visitante</th>
+          <th>Gols Visitante</th>
+          <th>Local</th>
+          <th>Data e Hora</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for match in matches %}
+          <tr>
+            <td>{{ match['id'] }}</td>
+            <td>{{ match['home_team'] }}</td>
+            <td>{{ match['home_goals'] }}</td>
+            <td>{{ match['visitor_team'] }}</td>
+            <td>{{ match['visitor_goals'] }}</td>
+            <td>{{ match['location'] }}</td>
+            <td>{{ match['date_hour'].strftime('%d/%m/%Y %H:%M') if match['date_hour'] else '' }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
-    <p>Nenhuma match encontrada.</p>
+    <p>Nenhuma partida encontrada.</p>
   {% endif %}
 {% endblock %}

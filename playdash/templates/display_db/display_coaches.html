@@ -1,24 +1,32 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Tecnicos Cadastrados{% endblock %}</h1>
+    <h1>{% block title %}Técnicos Cadastrados{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
     {% if coaches %}
-        <ul>
-        {% for coach in coaches %}
-            <li>
-                <strong>Nome:</strong> {{ coach['name'] }}<br>
-                <strong>Nome do time:</strong> {{ coach['team_name'] }}<br>
-                <strong>Data de Nascimento:</strong> {{ coach['date_of_birth'] }}<br>
-                <strong>Nacionalidade:</strong> {{ coach['nationality'] }}<br>
-                <strong>Foto:</strong> {{ coach['photo'] }}
-            </li>
-            <hr>
-        {% endfor %}
-        </ul>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Time</th>
+                    <th>Data de Nascimento</th>
+                    <th>Nacionalidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for coach in coaches %}
+                    <tr>
+                        <td>{{ coach['name'] }}</td>
+                        <td>{{ coach['team_name'] }}</td>
+                        <td>{{ coach['date_of_birth'].strftime('%d/%m/%Y') if coach['date_of_birth'] else '' }}</td>
+                        <td>{{ coach['nationality'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
-        <p>Nenhum coach cadastrado</p>
+        <p>Nenhum técnico cadastrado</p>
     {% endif %}
 {% endblock %}

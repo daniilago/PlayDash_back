@@ -19,20 +19,32 @@
   </form>
 
   {% if events %}
-    <h2>Eventos encontrados:</h2>
-    <ul>
+  <h2>Eventos encontrados:</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>ID da Partida</th>
+        <th>Tipo de Evento</th>
+        <th>Nome do Jogador</th>
+        <th>Time do Jogador</th>
+        <th>Data e Hora</th>
+      </tr>
+    </thead>
+    <tbody>
       {% for event in events %}
-        <li>
-          <strong>Evento ID:</strong> {{ event['id'] }}<br>
-          <strong>Partida ID:</strong> {{ event['id'] }}<br>
-          <strong>Tipo do Evento:</strong> {{ event['event_type'] }}<br>
-          <strong>Jogador:</strong> {{ event['name'] }}<br>
-          <strong>Time:</strong> {{ event['player_team'] }}<br>
-          <strong>Data e Horário:</strong> {{ event['date_hour'] }}
-        </li>
+        <tr>
+          <td>{{ event['id'] }}</td>
+          <td>{{ event['match_id'] }}</td>
+          <td>{{ event['event_type'] }}</td>
+          <td>{{ event['player_name'] }}</td>
+          <td>{{ event['player_team'] }}</td>
+          <td>{{ event['date_hour'].strftime('%d/%m/%Y %H:%M') if event['date_hour'] else '' }}</td>
+        </tr>
       {% endfor %}
-    </ul>
-  {% else %}
-    <p>Nenhum event encontrado.</p>
-  {% endif %}
+    </tbody>
+  </table>
+{% else %}
+  <p>Nenhum evento encontrado.</p>
+{% endif %}
 {% endblock %}

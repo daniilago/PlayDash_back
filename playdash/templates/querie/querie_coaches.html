@@ -16,18 +16,28 @@
   </form>
 
   {% if coaches %}
-    <h2>Técnicos encontrados:</h2>
-    <ul>
-      {% for coach in coaches %}
-        <li>
-          <strong>{{ coach['name'] }}</strong><br>
-          Time: {{ coach['name'] }}<br>
-          Nascimento: {{ coach['date_of_birth'].strftime('%d/%m/%Y') }}<br>
-          Nacionalidade: {{ coach['nationality'] }}
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>Nenhum técnico encontrado.</p>
-  {% endif %}
+  <h2>Técnicos encontrados:</h2>
+  <table border="1">
+      <thead>
+          <tr>
+              <th>Nome</th>
+              <th>Time</th>
+              <th>Data de Nascimento</th>
+              <th>Nacionalidade</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for coach in coaches %}
+              <tr>
+                  <td>{{ coach['name'] }}</td>
+                  <td>{{ coach['team_name'] }}</td>
+                  <td>{{ coach['date_of_birth'].strftime('%d/%m/%Y') if coach['date_of_birth'] else '' }}</td>
+                  <td>{{ coach['nationality'] }}</td>
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+{% else %}
+  <p>Nenhum técnico encontrado.</p>
+{% endif %}
 {% endblock %}
