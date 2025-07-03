@@ -12,8 +12,12 @@
     <label for="player_name">Nome do Jogador:</label>
     <input type="text" name="player_name" id="player_name" placeholder="Digite o nome do player...">
     
-    <label for="match_id">ID da Partida:</label>
-    <input type="shirt_number" name="match_id" id="match_id" placeholder="Digite o ID da match...">
+    <label for="match_id">Partida:</label>
+    <select name="match_id" id="match_id" required>
+        {% for match in matches %}
+            <option value="{{ match['id'] }}">{{ match['home_team'] }} Vs. {{ match['visitor_team'] }} as {{ match['date_hour'] }}</option>
+        {% endfor %}
+    </select>
     
     <button type="submit">Buscar</button>
   </form>

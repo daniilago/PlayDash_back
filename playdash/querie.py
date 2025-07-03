@@ -139,5 +139,7 @@ def querie_events():
             query += " AND e.match_id = ?"
             params.append(match_id)
 
+    matches = db.execute("SELECT * from match").fetchall()
+
     events = db.execute(query, params).fetchall()
-    return render_template("querie/querie_events.html", events=events)
+    return render_template("querie/querie_events.html", events=events, matches=matches)
