@@ -318,9 +318,50 @@ def insert_events():
     ).fetchall()
     event_types = ["gol", "falta", "cartao_amarelo", "cartao_vermelho"]
 
+    # Preencher times da primeira partida 
+    initial_teams = []
+    initial_players = []
+    if matches:
+        match_id = matches[0]["id"]
+        match = db.execute("SELECT home_team, visitor_team FROM match WHERE id = ?", (match_id,)).fetchone()
+        if match:
+            initial_teams = [match["home_team"], match["visitor_team"]]
+            # Pegue os jogadores do primeiro time da partida inicial
+            initial_players = db.execute(
+                "SELECT shirt_number AS player_number, name FROM player WHERE team_name = ?",
+                (initial_teams[0],)
+            ).fetchall()
+
     return render_template(
         "insert/insert_events.html",
         matches=matches,
         players=players,
         event_types=event_types,
+        initial_teams=initial_teams,
+        initial_players=initial_players
     )
+
+
+@bp.route("/get_teams_for_match")
+def get_teams_for_match():
+    match_id = request.args.get("match_id")
+    db = get_db()
+    match = db.execute("SELECT home_team, visitor_team FROM match WHERE id = ?", (match_id,)).fetchone()
+    options = ""
+    if match:
+        options += f'<option value="{match["home_team"]}">{match["home_team"]}</option>'
+        options += f'<option value="{match["visitor_team"]}">{match["visitor_team"]}</option>'
+    return options
+
+
+@bp.route("/get_players_for_team")
+def get_players_for_team():
+    team = request.args.get("player_team")
+    db = get_db()
+    players = db.execute(
+        "SELECT shirt_number AS player_number, name FROM player WHERE team_name = ?", (team,)
+    ).fetchall()
+    options = ""
+    for player in players:
+        options += f'<option value="{player["player_number"]}">{player["player_number"]} - {player["name"]}</option>'
+    return options

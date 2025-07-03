@@ -8,7 +8,11 @@
     <form method="post">
 
         <label for="match_id">Partida</label>
-        <select name="match_id" id="match_id" required>
+        <select name="match_id" id="match_id" required
+                hx-get="{{ url_for('insert.get_teams_for_match') }}"
+                hx-target="#player_team"
+                hx-trigger="change"
+                hx-include="[name='match_id']">
             {% for match in matches %}
                 <option value="{{ match['id'] }}">{{ match['id'] }}</option>
             {% endfor %}
@@ -19,15 +23,19 @@
 
         <label for="player_number">Número do Jogador</label>
         <select name="player_number" id="player_number" required>
-            {% for player in players %}
-                <option value="{{ player['player_number'] }}">{{ player['player_number'] }}</option>
+            {% for player in initial_players %}
+                <option value="{{ player['player_number'] }}">{{ player['player_number'] }} - {{ player['name'] }}</option>
             {% endfor %}
         </select>
 
         <label for="player_team">Time do Jogador</label>
-        <select name="player_team" id="player_team" required>
-            {% for player in players %}
-                <option value="{{ player['name'] }}">{{ player['name'] }}</option>
+        <select name="player_team" id="player_team" required
+                hx-get="{{ url_for('insert.get_players_for_team') }}"
+                hx-target="#player_number"
+                hx-trigger="change"
+                hx-include="[name='player_team'],[name='match_id']">
+            {% for team in initial_teams %}
+                <option value="{{ team }}">{{ team }}</option>
             {% endfor %}
         </select>
 
