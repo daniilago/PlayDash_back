@@ -134,15 +134,14 @@ def get_all_matches() -> list[Match]:
     filter = request.args.get("date", None)
     if filter is None:
         matches = db.execute("SELECT * FROM match").fetchall()
-    # filtros:
-    # passado: antes de hoje
-    # hoje: jogos de hoje
-    # semana: jogos da semana
-    # futuro: jogos depois da semana
-    elif filter == "passado":
-        matches = db.execute("SELECT * FROM match where date_hour < date()").fetchall()
-    elif filter == "futuro":
-        matches = db.execute("SELECT * FROM match where date_hour > date()").fetchall()
+    elif filter == "past":
+        matches = db.execute("SELECT * FROM match where date_hour < datetime('now', '-2 hours')").fetchall()
+    elif filter == "today":
+        matches = db.execute("SELECT * FROM match where date_hour >= datetime('now', '-2 hours') AND date_hour < date('now', '+1 day')").fetchall()
+    elif filter == "week":
+        matches = db.execute("SELECT * FROM match where date_hour > date() AND date_hour <= date('now', 'weekday 6')").fetchall()
+    elif filter == "future":
+        matches = db.execute("SELECT * FROM match where date_hour > date('now', 'weekday 6')").fetchall()
     return Match.models_to_json([Match.from_db(val) for val in matches])
 
 
