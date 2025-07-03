@@ -96,3 +96,116 @@ CREATE TABLE event (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+CREATE TRIGGER update_player_stats_after_event
+AFTER INSERT ON event
+BEGIN
+    UPDATE player
+    SET goals = goals + 1
+    WHERE shirt_number = NEW.player_number
+      AND team_name = NEW.player_team
+      AND NEW.event_type = 'gol';
+
+    UPDATE player
+    SET yellow_cards = yellow_cards + 1
+    WHERE shirt_number = NEW.player_number
+      AND team_name = NEW.player_team
+      AND NEW.event_type = 'cartao_amarelo';
+
+    UPDATE player
+    SET red_cards = red_cards + 1
+    WHERE shirt_number = NEW.player_number
+      AND team_name = NEW.player_team
+      AND NEW.event_type = 'cartao_vermelho';
+
+    UPDATE player
+    SET fouls = fouls + 1
+    WHERE shirt_number = NEW.player_number
+      AND team_name = NEW.player_team
+      AND NEW.event_type = 'falta';
+END;
+
+CREATE TRIGGER update_team_stats_after_event
+AFTER INSERT ON event
+BEGIN
+    UPDATE team
+    SET own_goals = own_goals + 1
+    WHERE name = NEW.player_team AND NEW.event_type = 'gol';
+
+    UPDATE team
+    SET fouls = fouls + 1
+    WHERE name = NEW.player_team AND NEW.event_type = 'falta';
+
+    UPDATE team
+    SET yellow_cards = yellow_cards + 1
+    WHERE name = NEW.player_team AND NEW.event_type = 'cartao_amarelo';
+
+    UPDATE team
+    SET red_cards = red_cards + 1
+    WHERE name = NEW.player_team AND NEW.event_type = 'cartao_vermelho';
+END;
+
+CREATE TRIGGER update_team_against_goals_after_event
+AFTER INSERT ON event
+BEGIN
+    UPDATE team
+    SET against_goals = against_goals + 1
+    WHERE name IN (
+        SELECT CASE
+            WHEN m.home_team = NEW.player_team THEN m.visitor_team
+            WHEN m.visitor_team = NEW.player_team THEN m.home_team
+        END
+        FROM match m
+        WHERE m.id = NEW.match_id
+    )
+    AND NEW.event_type = 'gol';
+END;
+
+CREATE TRIGGER update_match_goals_after_event
+AFTER INSERT ON event
+BEGIN
+    -- Gols do time da casa
+    UPDATE match
+    SET home_goals = home_goals + 1
+    WHERE id = NEW.match_id
+      AND home_team = NEW.player_team
+      AND NEW.event_type = 'gol';
+
+    -- Gols do time visitante
+    UPDATE match
+    SET visitor_goals = visitor_goals + 1
+    WHERE id = NEW.match_id
+      AND visitor_team = NEW.player_team
+      AND NEW.event_type = 'gol';
+END;
+
+CREATE TRIGGER update_team_stats_after_match
+AFTER INSERT ON match
+BEGIN
+    -- Total de partidas
+    UPDATE team
+    SET match_total = match_total + 1
+    WHERE name = NEW.home_team OR name = NEW.visitor_team;
+
+    -- Vitórias, empates, derrotas e pontos para o time da casa
+    UPDATE team
+    SET wins = wins + CASE WHEN NEW.home_goals > NEW.visitor_goals THEN 1 ELSE 0 END,
+        draws = draws + CASE WHEN NEW.home_goals = NEW.visitor_goals THEN 1 ELSE 0 END,
+        losses = losses + CASE WHEN NEW.home_goals < NEW.visitor_goals THEN 1 ELSE 0 END,
+        points_total = points_total + CASE
+            WHEN NEW.home_goals > NEW.visitor_goals THEN 3
+            WHEN NEW.home_goals = NEW.visitor_goals THEN 1
+            ELSE 0 END
+    WHERE name = NEW.home_team;
+
+    -- Vitórias, empates, derrotas e pontos para o time visitante
+    UPDATE team
+    SET wins = wins + CASE WHEN NEW.visitor_goals > NEW.home_goals THEN 1 ELSE 0 END,
+        draws = draws + CASE WHEN NEW.home_goals = NEW.visitor_goals THEN 1 ELSE 0 END,
+        losses = losses + CASE WHEN NEW.visitor_goals < NEW.home_goals THEN 1 ELSE 0 END,
+        points_total = points_total + CASE
+            WHEN NEW.visitor_goals > NEW.home_goals THEN 3
+            WHEN NEW.home_goals = NEW.visitor_goals THEN 1
+            ELSE 0 END
+    WHERE name = NEW.visitor_team;
+END;

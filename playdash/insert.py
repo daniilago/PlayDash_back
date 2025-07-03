@@ -18,11 +18,13 @@ def save_file(name: str, file):
     file.save(file_path)
     return filename
 
+
 @bp.before_request
 def require_login():
     if g.user is None:
         flash("Faça login para acessar esta página.")
         return redirect(url_for("auth.login"))
+
 
 @bp.route("/", methods=("GET", "POST"))
 def insert():

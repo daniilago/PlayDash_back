@@ -31,6 +31,7 @@ def load_logged_in_user():
             .fetchone()
         )
 
+
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     if request.method == "POST":
@@ -68,7 +69,7 @@ def register():
 def login():
     if g.user is not None:
         return redirect(url_for("home.home"))
-    
+
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
@@ -82,7 +83,8 @@ def login():
         elif not check_password_hash(user["password"], password):
             error = "Incorrect password"
 
-        if error is None and user['user_type'] == "A":
+        print(error)
+        if error is None and user["user_type"] == "A":
             session.clear()
             session["user_name"] = user["name"]
             return redirect(url_for("home.home"))

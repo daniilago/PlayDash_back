@@ -1,13 +1,24 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, g, flash
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    g,
+    flash,
+)
 from playdash.db import get_db
 
 bp = Blueprint("delete", __name__, url_prefix="/delete")
+
 
 @bp.before_request
 def require_login():
     if g.user is None:
         flash("Faça login para acessar esta página.")
         return redirect(url_for("auth.login"))
+
 
 @bp.route("/", methods=("GET",))
 def delete():
@@ -26,12 +37,12 @@ def delete_teams():
     db = get_db()
     if request.method == "POST":
         team_name = request.form["team_name"]
-        db.execute('DELETE FROM team WHERE name = ?', (team_name,))
+        db.execute("DELETE FROM team WHERE name = ?", (team_name,))
         db.commit()
         flash(f"Time {team_name} deletado.")
         return redirect(url_for("delete.delete_teams"))
 
-    teams = db.execute('SELECT * FROM team').fetchall()
+    teams = db.execute("SELECT * FROM team").fetchall()
     return render_template("delete/delete_teams.html", teams=teams)
 
 

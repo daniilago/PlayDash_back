@@ -11,6 +11,7 @@ def require_login():
         flash("Faça login para acessar esta página.")
         return redirect(url_for("auth.login"))
 
+
 @bp.route("/", methods=("GET", "POST"))
 def display_db():
     links = [

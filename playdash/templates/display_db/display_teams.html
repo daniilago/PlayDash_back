@@ -6,21 +6,29 @@
 
 {% block content %}
     {% if teams %}
+        <ul>
         {% for team in teams %}
-            <li>{{  team['name'], 
-                    team['emblem'], 
-                    team['match_total'], 
-                    team['points_total'],
-                    team['fouls'],
-                    team['yellow_cards'],
-                    team['red_cards'],
-                    team['wins'],
-                    team['draws'],
-                    team['losses'],
-                    team['own_goals'],
-                    team['against_goals']
-            }}</li>
+            <li>
+                <strong>Nome:</strong> {{ team['name'] }} |
+                <strong>Emblema:</strong> {{ team['emblem'] }}
+                <br>
+                <strong>Total de Partidas:</strong> {{ team['match_total'] }} |
+                <strong>Vitórias:</strong> {{ team['wins'] }} |
+                <strong>Empates:</strong> {{ team['draws'] }} |
+                <strong>Derrotas:</strong> {{ team['losses'] }}
+                <br>
+                <strong>Pontos Totais:</strong> {{ team['points_total'] }}
+                <br>
+                <strong>Gols Próprios:</strong> {{ team['own_goals'] }} |
+                <strong>Gols Sofridos:</strong> {{ team['against_goals'] }}
+                <br>
+                <strong>Faltas:</strong> {{ team['fouls'] }} |
+                <strong>Cartões Amarelos:</strong> {{ team['yellow_cards'] }} |
+                <strong>Cartões Vermelhos:</strong> {{ team['red_cards'] }}
+            </li>
+            <hr>
         {% endfor %}
+        <ul>
     {% else %}
         <p>Nenhum time cadastrado</p>
     {% endif %}

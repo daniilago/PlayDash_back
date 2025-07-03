@@ -6,20 +6,28 @@
 
 {% block content %}
     {% if players %}
+        <ul>
         {% for player in players %}
-            <li>{{  player['name'], 
-                    player['date_of_birth'], 
-                    player['nationality'], 
-                    player['photo'],
-                    player['goals'],
-                    player['position'],
-                    player['shirt_number'],
-                    player['fouls'],
-                    player['yellow_cards'],
-                    player['red_cards'],
-                    player['name']
-            }}</li>
+            <li>
+                <strong>Nome:</strong> {{ player['name'] }} |
+                <strong>Número:</strong> {{ player['shirt_number'] }} |
+                <strong>Posição:</strong> {{ player['position'] }}
+                <strong>Nome do time:</strong> {{ player['team_name'] }}
+                <br>
+                <strong>Data de Nascimento:</strong> {{ player['date_of_birth'] }} |
+                <strong>Nacionalidade:</strong> {{ player['nationality'] }}
+                <br>
+                <strong>Gols:</strong> {{ player['goals'] }} |
+                <strong>Faltas:</strong> {{ player['fouls'] }}
+                <br>
+                <strong>Cartões Amarelos:</strong> {{ player['yellow_cards'] }} |
+                <strong>Cartões Vermelhos:</strong> {{ player['red_cards'] }}
+                <br>
+                <strong>Foto:</strong> {{ player['photo'] }}
+            </li>
+            <hr>
         {% endfor %}
+        </ul>
     {% else %}
         <p>Nenhum player cadastrado</p>
     {% endif %}

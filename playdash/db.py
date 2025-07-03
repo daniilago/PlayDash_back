@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime
 import click
 from flask import current_app, g
+from werkzeug.security import generate_password_hash
 
 
 def get_db():
@@ -53,6 +54,100 @@ def drop_db_command():
     click.echo("Dropped all tables.")
 
 
+@click.command("fill-db")
+def fill_db_command():
+    """Fill all tables from the database if they are empty."""
+    db = get_db()
+
+    # Usuário
+    user_exists = db.execute("SELECT 1 FROM user LIMIT 1").fetchone()
+    if not user_exists:
+        db.execute(
+            "INSERT INTO user (name, email, password, user_type) VALUES (?, ?, ?, ?)",
+            ("danilago", "daniellago341@gmail.com", generate_password_hash("123"), "A"),
+        )
+
+    # Times
+    team_exists = db.execute("SELECT 1 FROM team LIMIT 1").fetchone()
+    if not team_exists:
+        db.execute(
+            "INSERT INTO team (name, emblem) VALUES (?, ?)",
+            ("a", "a.jpg"),
+        )
+        db.execute(
+            "INSERT INTO team (name, emblem) VALUES (?, ?)",
+            ("b", "a.jpg"),
+        )
+
+    # Jogador
+    player_exists = db.execute("SELECT 1 FROM player LIMIT 1").fetchone()
+    if not player_exists:
+        db.execute(
+            """
+            INSERT INTO player (
+                name, date_of_birth, nationality,
+                photo, position, shirt_number, team_name
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                "a",
+                "2025-07-08",
+                "piruano",
+                "aa69.jpg",
+                "cow girl",
+                69,
+                "a",
+            ),
+        )
+
+    # Técnico
+    coach_exists = db.execute("SELECT 1 FROM coach LIMIT 1").fetchone()
+    if not coach_exists:
+        db.execute(
+            """
+            INSERT INTO coach (
+                name, date_of_birth, nationality,
+                photo, team_name
+            ) VALUES (?, ?, ?, ?, ?)
+            """,
+            ("a", "2025-07-07", "piruano", "a.jpg", "a"),
+        )
+
+    # Partida
+    match_exists = db.execute("SELECT 1 FROM match LIMIT 1").fetchone()
+    if not match_exists:
+        db.execute(
+            """
+            INSERT INTO match (
+                date_hour, location,
+                home_team, visitor_team
+            ) VALUES (?, ?, ?, ?)
+            """,
+            ("2025-07-26 02:06", "da", "a", "b"),
+        )
+
+    # Evento
+    event_exists = db.execute("SELECT 1 FROM event LIMIT 1").fetchone()
+    if not event_exists:
+        db.execute(
+            """
+            INSERT INTO event (id, match_id, date_hour, player_number, player_team, event_type)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                10000,
+                1,
+                "2025-07-15 02:16",
+                69,
+                "a",
+                "gol",
+            ),
+        )
+
+    db.commit()
+    click.echo("Filled all tables (if empty).")
+
+
 sqlite3.register_converter("timestamp", lambda v: datetime.fromisoformat(v.decode()))
 
 
@@ -60,3 +155,4 @@ def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
     app.cli.add_command(drop_db_command)
+    app.cli.add_command(fill_db_command)

@@ -8,13 +8,15 @@
     {% if events %}
         <ul>
         {% for event in events %}
-            <li>{{  event['id'],
-                    event['id'],
-                    event['date_hour'].strftime('%d/%m/%Y %H:%M'),
-                    event['player_number'],
-                    event['player_team'],
-                    event['event_type']
-            }}</li>
+            <li>
+                <strong>ID:</strong> {{ event['id'] }}<br>
+                <strong>ID da Partida:</strong> {{ event['match_id'] }}<br>
+                <strong>Data e Hora:</strong> {{ event['date_hour'].strftime('%d/%m/%Y %H:%M') if event['date_hour'] else '' }}<br>
+                <strong>Número do Jogador:</strong> {{ event['player_number'] }}<br>
+                <strong>Time do Jogador:</strong> {{ event['player_team'] }}<br>
+                <strong>Tipo de Evento:</strong> {{ event['event_type'] }}
+            </li>
+            <hr>
         {% endfor %}
         </ul>
     {% else %}

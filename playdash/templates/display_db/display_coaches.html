@@ -6,14 +6,18 @@
 
 {% block content %}
     {% if coaches %}
+        <ul>
         {% for coach in coaches %}
-            <li>{{  coach['name'], 
-                    coach['date_of_birth'], 
-                    coach['nationality'], 
-                    coach['photo'],
-                    coach['name']
-            }}</li>
+            <li>
+                <strong>Nome:</strong> {{ coach['name'] }}<br>
+                <strong>Nome do time:</strong> {{ coach['team_name'] }}<br>
+                <strong>Data de Nascimento:</strong> {{ coach['date_of_birth'] }}<br>
+                <strong>Nacionalidade:</strong> {{ coach['nationality'] }}<br>
+                <strong>Foto:</strong> {{ coach['photo'] }}
+            </li>
+            <hr>
         {% endfor %}
+        </ul>
     {% else %}
         <p>Nenhum coach cadastrado</p>
     {% endif %}

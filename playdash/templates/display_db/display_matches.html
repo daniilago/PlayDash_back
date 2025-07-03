@@ -6,16 +6,20 @@
 
 {% block content %}
     {% if matches %}
+        <ul>
         {% for match in matches %}
-            <li>{{  match['id'], 
-                    match['date_hour'].strftime('%d/%m/%Y %H:%M'), 
-                    match['location'], 
-                    match['home_team'],
-                    match['visitor_team'],
-                    match['home_goals'],
-                    match['visitor_goals']
-            }}</li>
+            <li>
+                <strong>ID:</strong> {{ match['id'] }}<br>
+                <strong>Data e Hora:</strong> {{ match['date_hour'].strftime('%d/%m/%Y %H:%M') if match['date_hour'] else '' }}<br>
+                <strong>Local:</strong> {{ match['location'] }}<br>
+                <strong>Time da Casa:</strong> {{ match['home_team'] }} |
+                <strong>Gols:</strong> {{ match['home_goals'] }}<br>
+                <strong>Time Visitante:</strong> {{ match['visitor_team'] }} |
+                <strong>Gols:</strong> {{ match['visitor_goals'] }}
+            </li>
+            <hr>
         {% endfor %}
+        </ul>
     {% else %}
         <p>Nenhuma match cadastrada</p>
     {% endif %}

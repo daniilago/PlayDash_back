@@ -3,11 +3,13 @@ from playdash.db import get_db
 
 bp = Blueprint("querie", __name__, url_prefix="/querie")
 
+
 @bp.before_request
 def require_login():
     if g.user is None:
         flash("Faça login para acessar esta página.")
         return redirect(url_for("auth.login"))
+
 
 @bp.route("/", methods=("GET",))
 def querie():
@@ -27,10 +29,10 @@ def querie_teams():
     if request.method == "POST":
         team_name = request.form["team_name"]
         teams = db.execute(
-            'SELECT * FROM team WHERE name LIKE ?', (f"%{team_name}%",)
+            "SELECT * FROM team WHERE name LIKE ?", (f"%{team_name}%",)
         ).fetchall()
     else:
-        teams = db.execute('SELECT * FROM team').fetchall()
+        teams = db.execute("SELECT * FROM team").fetchall()
     return render_template("querie/querie_teams.html", teams=teams)
 
 

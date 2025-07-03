@@ -6,13 +6,17 @@
 
 {% block content %}
     {% if users %}
+        <ul>
         {% for user in users %}
-            <li>{{  user['name'], 
-                    user['email'], 
-                    user['user_type'] 
-                }}</li>
+            <li>
+                <strong>Nome:</strong> {{ user['name'] }}<br>
+                <strong>Email:</strong> {{ user['email'] }}<br>
+                <strong>Tipo de Usuário:</strong> {{ user['user_type'] }}
+            </li>
+            <hr>
         {% endfor %}
+        <ul>
     {% else %}
-        <p>Nenhum user cadastrado</p>
+        <p>Nenhum usuario cadastrado</p>
     {% endif %}
 {% endblock %}
