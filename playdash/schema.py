@@ -19,7 +19,7 @@ class BaseSchema(BaseModel):
 
 
 def url_from_db(value: Any, handler):
-    return handler(f"http://localhost:5000/{value}")
+    return handler(f"http://localhost:5000/public/{value}")
 
 
 Url = Annotated[HttpUrl, WrapValidator(url_from_db)]

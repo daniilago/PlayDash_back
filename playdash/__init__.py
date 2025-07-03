@@ -3,7 +3,7 @@ from flask import Flask, send_from_directory
 from flask_openapi3 import OpenAPI
 
 UPLOAD_FOLDER = "images"
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 
 def create_app(test_config=None):
