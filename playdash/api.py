@@ -83,7 +83,13 @@ def get_one_team(path: PathName):
 )
 def get_all_players() -> list[Player]:
     db = get_db()
-    players = db.execute("SELECT * FROM player ").fetchall()
+    team_name = request.args.get("team", None)
+    if team_name is None:
+        players = db.execute("SELECT * FROM player").fetchall()
+    else:
+        players = db.execute(
+            "SELECT * FROM player WHERE team_name = ?", tuple(team_name)
+        ).fetchall()
     return Player.models_to_json([Player.from_db(val) for val in players])
 
 
