@@ -37,7 +37,7 @@ CREATE TABLE player (
     red_cards integer NOT NULL DEFAULT 0,
     team_name character varying(100) NOT NULL,
 
-    CONSTRAINT player_pkey PRIMARY KEY (shirt_number, name),
+    CONSTRAINT player_pkey PRIMARY KEY (shirt_number, team_name),
     CONSTRAINT player_team_name_fkey FOREIGN KEY (team_name) 
         REFERENCES team(name) 
         ON DELETE CASCADE
@@ -81,12 +81,12 @@ CREATE TABLE match (
 CREATE TABLE event (
     id integer NOT NULL,
     match_id integer NOT NULL,
-    date_hour date NOT NULL,
+    date_hour timestamp NOT NULL,
     player_number integer NOT NULL,
     player_team character varying(100) NOT NULL,
     event_type character varying(20) NOT NULL,
 
-    CONSTRAINT event_pkey PRIMARY KEY (id, id),
+    CONSTRAINT event_pkey PRIMARY KEY (id, match_id),
     CONSTRAINT event_match_id_fkey FOREIGN KEY (match_id) 
         REFERENCES match(id)
         ON DELETE CASCADE
