@@ -67,6 +67,9 @@ def register():
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
+    if g.user is not None:
+        return redirect(url_for("home.home"))
+    
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
