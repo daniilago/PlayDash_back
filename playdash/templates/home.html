@@ -5,10 +5,29 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% for link in links%}
-            <a href="{{ link.url }}" class="link-button">{{ link.name }}</a>
+    <div>
+        <h3>{{ topics[0].name }}</h3>
+        {% for link in links1 %}
+            <a href="{{ link.url }}" class="link-button">{{ link.name }}</a><br>
         {% endfor %}
-    </form>
+    </div>
+    <div>
+        <h3>{{ topics[1].name }}</h3>
+        {% for link in links2 %}
+            <a href="{{ link.url }}" class="link-button">{{ link.name }}</a><br>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>{{ topics[2].name }}</h3>
+        {% for link in links3 %}
+            <a href="{{ link.url }}" class="link-button">{{ link.name }}</a><br>
+        {% endfor %}
+    </div>
+    <div>
+        <h3>{{ topics[3].name }}</h3>
+        {% for link in links4 %}
+            <a href="{{ link.url }}" class="link-button">{{ link.name }}</a><br>
+        {% endfor %}
+    </div>
 {% endblock %}
 

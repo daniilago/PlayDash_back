@@ -13,20 +13,6 @@ def require_login():
         return redirect(url_for("auth.login"))
 
 
-@bp.route("/", methods=("GET", "POST"))
-def display_db():
-    links = [
-        {"name": "Ver Usuários", "url": url_for("display_db.display_users")},
-        {"name": "Ver Times", "url": url_for("display_db.display_teams")},
-        {"name": "Ver Jogadores", "url": url_for("display_db.display_players")},
-        {"name": "Ver Técnicos", "url": url_for("display_db.display_coaches")},
-        {"name": "Ver Partidas", "url": url_for("display_db.display_matches")},
-        {"name": "Ver Eventos", "url": url_for("display_db.display_events")},
-    ]
-
-    return render_template("display_db/display_db.html", links=links)
-
-
 @bp.route("/users", methods=("GET", "POST"))
 def display_users():
     db = get_db()
