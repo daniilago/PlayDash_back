@@ -34,8 +34,8 @@ def create_app(test_config=None):
 
     from . import home, auth, display_db, insert, delete, querie, api
 
-    app.register_blueprint(home.bp)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(home.bp)
     app.register_blueprint(display_db.bp)
     app.register_blueprint(insert.bp)
     app.register_blueprint(delete.bp)

@@ -1,10 +1,16 @@
-from flask import Blueprint, render_template, url_for, redirect
+from flask import Blueprint, render_template, url_for, redirect, flash, g
+
 
 bp = Blueprint(
     "home",
     __name__,
 )
 
+@bp.before_request
+def require_login():
+    if g.user is None:
+        flash("Faça login para acessar esta página.")
+        return redirect(url_for("auth.login"))
 
 @bp.route("/", methods=("GET", "POST"))
 def index():

@@ -31,7 +31,6 @@ def load_logged_in_user():
             .fetchone()
         )
 
-
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     if request.method == "POST":
@@ -52,7 +51,7 @@ def register():
             try:
                 db.execute(
                     "INSERT INTO user (name, email, password, user_type) VALUES (?, ?, ?, ?)",
-                    (username, email, generate_password_hash(password), "f"),
+                    (username, email, generate_password_hash(password), "A"),
                 )
                 db.commit()
             except db.IntegrityError:
@@ -83,10 +82,12 @@ def login():
         elif not check_password_hash(user["password"], password):
             error = "Incorrect password"
 
-        if error is None:
+        if error is None and user['user_type'] == "A":
             session.clear()
             session["user_name"] = user["name"]
             return redirect(url_for("home.home"))
+        else:
+            error = "Not an ADMINISTRATOR"
 
         flash(error)
 

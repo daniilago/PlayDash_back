@@ -1,8 +1,13 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, g, flash
 from playdash.db import get_db
 
 bp = Blueprint("delete", __name__, url_prefix="/delete")
 
+@bp.before_request
+def require_login():
+    if g.user is None:
+        flash("Faça login para acessar esta página.")
+        return redirect(url_for("auth.login"))
 
 @bp.route("/", methods=("GET",))
 def delete():

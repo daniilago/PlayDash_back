@@ -1,9 +1,15 @@
-from flask import Blueprint, render_template, url_for
+from flask import Blueprint, render_template, url_for, redirect, g, flash
 
 from playdash.db import get_db
 
 bp = Blueprint("display_db", __name__, url_prefix="/display_db")
 
+
+@bp.before_request
+def require_login():
+    if g.user is None:
+        flash("Faça login para acessar esta página.")
+        return redirect(url_for("auth.login"))
 
 @bp.route("/", methods=("GET", "POST"))
 def display_db():
