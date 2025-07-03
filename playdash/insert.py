@@ -348,11 +348,8 @@ def get_teams_for_match():
     match_id = request.args.get("match_id")
     db = get_db()
     match = db.execute("SELECT home_team, visitor_team FROM match WHERE id = ?", (match_id,)).fetchone()
-    options = ""
     if match:
-        options += f'<option value="{match["home_team"]}">{match["home_team"]}</option>'
-        options += f'<option value="{match["visitor_team"]}">{match["visitor_team"]}</option>'
-    return options
+        return render_template("fragmento_match_teams.html", match=match)
 
 
 @bp.route("/get_players_for_team")
@@ -362,7 +359,21 @@ def get_players_for_team():
     players = db.execute(
         "SELECT shirt_number AS player_number, name FROM player WHERE team_name = ?", (team,)
     ).fetchall()
-    options = ""
-    for player in players:
-        options += f'<option value="{player["player_number"]}">{player["player_number"]} - {player["name"]}</option>'
-    return options
+    
+    return render_template("fragmento_team_players.html", players=players)
+
+@bp.route("/get_teams_and_players_for_match")
+def get_teams_and_players_for_match():
+    match_id = request.args.get("match_id")
+    db = get_db()
+    match = db.execute("SELECT home_team, visitor_team FROM match WHERE id = ?", (match_id,)).fetchone()
+    initial_teams = []
+    initial_players = []
+    if match:
+        initial_teams = [match["home_team"], match["visitor_team"]]
+        # Jogadores do primeiro time da partida
+        initial_players = db.execute(
+            "SELECT shirt_number AS player_number, name FROM player WHERE team_name = ?",
+            (initial_teams[0],)
+        ).fetchall()
+    return render_template("fragmento_match_teams_players.html", initial_teams=initial_teams, initial_players=initial_players)

@@ -9,8 +9,8 @@
 
         <label for="match_id">Partida</label>
         <select name="match_id" id="match_id" required
-                hx-get="{{ url_for('insert.get_teams_for_match') }}"
-                hx-target="#player_team"
+                hx-get="{{ url_for('insert.get_teams_and_players_for_match') }}"
+                hx-target="#team_and_players"
                 hx-trigger="change"
                 hx-include="[name='match_id']">
             {% for match in matches %}
@@ -21,23 +21,25 @@
         <label for="date_hour">Data e Hora</label>
         <input name="date_hour" id="date_hour" type="datetime-local" required>
 
-        <label for="player_number">Número do Jogador</label>
-        <select name="player_number" id="player_number" required>
-            {% for player in initial_players %}
-                <option value="{{ player['player_number'] }}">{{ player['player_number'] }} - {{ player['name'] }}</option>
-            {% endfor %}
-        </select>
+        <div id="team_and_players">
+            <label for="player_team">Time do Jogador</label>
+            <select name="player_team" id="player_team" required
+                    hx-get="{{ url_for('insert.get_players_for_team') }}"
+                    hx-target="#player_number"
+                    hx-trigger="change"
+                    hx-include="[name='player_team'],[name='match_id']">
+                {% for team in initial_teams %}
+                    <option value="{{ team }}">{{ team }}</option>
+                {% endfor %}
+            </select>
 
-        <label for="player_team">Time do Jogador</label>
-        <select name="player_team" id="player_team" required
-                hx-get="{{ url_for('insert.get_players_for_team') }}"
-                hx-target="#player_number"
-                hx-trigger="change"
-                hx-include="[name='player_team'],[name='match_id']">
-            {% for team in initial_teams %}
-                <option value="{{ team }}">{{ team }}</option>
-            {% endfor %}
-        </select>
+            <label for="player_number">Número do Jogador</label>
+            <select name="player_number" id="player_number" required>
+                {% for player in initial_players %}
+                    <option value="{{ player['player_number'] }}">{{ player['player_number'] }} - {{ player['name'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
         <label for="event_type">Tipo do Evento</label>
         <select name="event_type" id="event_type" required>
