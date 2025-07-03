@@ -1,26 +1,30 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Usuarios Cadastrados{% endblock %}</h1>
+    <h1>{% block title %}Usuários Cadastrados{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
     {% if users %}
-        <table>
-        <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Tipo</th>
-        </tr>
-        {% for user in users %}
-            <tr>
-            {% for value in user %}
-                <td>{{value}}</td>
-            {% endfor %}
-            </tr>
-        {% endfor %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.user_type }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     {% else %}
-        <p>Nenhum usuario cadastrado</p>
+        <p>Nenhum usuário cadastrado</p>
     {% endif %}
 {% endblock %}
