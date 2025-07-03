@@ -198,47 +198,83 @@ def get_one_event(path: PathID):
 
 @bp.get(
     "/stats/best_player",
-    summary="return the best player",
+    summary="return the best player (most goals, less penalties)",
     tags=[stats_tag],
     responses={200: RootModel[list[Player]]},
 )
 def get_best_player():
     db = get_db()
-    player = db.execute("SELECT * FROM player ORDER BY goals DESC LIMIT 1").fetchone()
+    player = db.execute("""SELECT * FROM player
+                        ORDER BY goals DESC, red_cards ASC, yellow_cards ASC, fouls ASC
+                        LIMIT 1""").fetchone()
     return Player.models_to_json(Player.from_db(player))
 
 
 @bp.get(
     "/stats/worst_player",
-    summary="return the worst player",
+    summary="return the worst player (least goals, most penalties)",
     tags=[stats_tag],
     responses={200: RootModel[list[Player]]},
 )
 def get_worst_player():
     db = get_db()
-    player = db.execute("SELECT * FROM player ORDER BY goals ASC LIMIT 1").fetchone()
+    player = db.execute("""SELECT * FROM player
+                        ORDER BY goals ASC, red_cards DESC, yellow_cards DESC, fouls DESC
+                        LIMIT 1""").fetchone()
+    return Player.models_to_json(Player.from_db(player))
+
+
+@bp.get(
+    "/stats/player_fair_play",
+    summary="return the player with the least penalties",
+    tags=[stats_tag],
+    responses={200: RootModel[list[Player]]},
+)
+def get_player_fair_play():
+    db = get_db()
+    player = db.execute("""SELECT * FROM player
+                        red_cards ASC, yellow_cards ASC, fouls ASC
+                        LIMIT 1""").fetchone()
+    return Player.models_to_json(Player.from_db(player))
+
+
+@bp.get(
+    "/stats/player_foul_play",
+    summary="return the player with the most penalties",
+    tags=[stats_tag],
+    responses={200: RootModel[list[Player]]},
+)
+def get_player_foul_play():
+    db = get_db()
+    player = db.execute("""SELECT * FROM player
+                        red_cards DESC, yellow_cards DESC, fouls DESC
+                        LIMIT 1""").fetchone()
     return Player.models_to_json(Player.from_db(player))
 
 
 @bp.get(
     "/stats/team_fair_play",
-    summary="return the best team (fair_play)",
+    summary="return the team with the least penalties",
     tags=[stats_tag],
     responses={200: RootModel[list[Team]]},
 )
 def get_team_fair_play():
     db = get_db()
-    team = db.execute("SELECT * FROM team ORDER BY fouls ASC LIMIT 1").fetchone()
+    team = db.execute("""SELECT * FROM team
+                        red_cards ASC, yellow_cards ASC, fouls ASC
+                        LIMIT 1""").fetchone()
     return Team.models_to_json(Team.from_db(team))
 
 
 @bp.get(
     "/stats/team_foul_play",
-    summary="return the worst team (foul_play)",
+    summary="return the team with the most penalties",
     tags=[stats_tag],
     responses={200: RootModel[list[Team]]},
 )
 def get_team_foul_play():
     db = get_db()
-    team = db.execute("SELECT * FROM team ORDER BY fouls DESC LIMIT 1").fetchone()
+    team = db.execute("""SELECT * FROM team
+                        red_cards DESCellow_cards DESCouls DESC
+                        LIMIT 1""").fetchone()
     return Team.models_to_json(Team.from_db(team))
