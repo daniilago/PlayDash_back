@@ -22,7 +22,7 @@ def index():
 @bp.route("/home", methods=("GET", "POST"))
 def home():
     topics = [
-        {"name": "Ver Banco de Bagos"},
+        {"name": "Ver Banco de Dados"},
         {"name": "Inserir dados"},
         {"name": "Deletar dados"},
         {"name": "Consultar dados"},
