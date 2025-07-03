@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect, g, flash
 
 from playdash.db import get_db
+from playdash.schema import User
 
 bp = Blueprint("display_db", __name__, url_prefix="/display_db")
 
@@ -29,8 +30,7 @@ def display_db():
 @bp.route("/users", methods=("GET", "POST"))
 def display_users():
     db = get_db()
-    users = db.execute("SELECT * FROM user").fetchall()
-
+    users = db.execute("SELECT name, email, user_type FROM user").fetchall()
     return render_template("display_db/display_users.html", users=users)
 
 
